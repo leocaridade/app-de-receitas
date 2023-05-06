@@ -1,10 +1,12 @@
 import React from 'react';
+import Header from '../components/Header';
 
 function Meals() {
   return (
-    <div>
-      <p>hello, world!</p>
-    </div>
+    <>
+      <Header title="Meals" searchBtn />
+      <div>Meals</div>
+    </>
   );
 }
 
