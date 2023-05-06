@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
+import { setLocalStorage } from '../services/localStorage';
 
 function Login() {
+  const history = useHistory();
   const [validLogin, setValidLogin] = useState(false);
   const [userInfo, setUserInfo] = useState({
     email: '',
@@ -30,6 +33,11 @@ function Login() {
     }
   };
 
+  const handleLoginClick = () => {
+    setLocalStorage('user', { email: userInfo.email });
+    history.push('/meals');
+  };
+
   return (
     <div>
       <form>
@@ -50,6 +58,7 @@ function Login() {
         <button
           data-testid="login-submit-btn"
           disabled={ !validLogin }
+          onClick={ handleLoginClick }
         >
           Enter
         </button>
