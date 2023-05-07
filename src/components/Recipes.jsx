@@ -1,14 +1,16 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import fetchMealsAPI from '../services/mealsAPI';
-import fetchDrinksAPI from '../services/drinksAPI';
+import { fetchCategoriesMealsAPI, fetchMealsAPI } from '../services/mealsAPI';
+import { fetchCategoriesDrinksAPI, fetchDrinksAPI } from '../services/drinksAPI';
 
 function Recipes({ recipeType }) {
   const [recipes, setRecipes] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [mappedRecipes, setMappedRecipes] = useState([]);
+  const [mappedCategories, setMappedCategories] = useState([]);
 
   const mapFood = useCallback((recipeData) => {
-    if (recipeData.length === 0) return;
+    if (!recipeData) return;
 
     const maxCardsNumber = 12;
     const maxCards = recipeData.slice(0, maxCardsNumber);
@@ -25,16 +27,33 @@ function Recipes({ recipeType }) {
     setMappedRecipes(cards);
   }, []);
 
+  const mapFoodByCategory = useCallback((categoriesData) => {
+    const maxCardsNumber = 5;
+    const maxCards = categoriesData.slice(0, maxCardsNumber);
+    const cards = maxCards.map((category, index) => (
+      <div key={ index } data-testid={ `${category.strCategory}-category-filter` }>
+        <button>{ category.strCategory }</button>
+      </div>
+    ));
+    setMappedCategories(cards);
+  }, []);
+
   useEffect(() => {
     const handleFetch = async () => {
       try {
         let recipeData;
+        let categoryData;
+
         if (recipeType === 'meals') {
           recipeData = await fetchMealsAPI();
+          categoryData = await fetchCategoriesMealsAPI();
+          setCategories(categoryData);
           setRecipes(recipeData);
         }
         if (recipeType === 'drinks') {
           recipeData = await fetchDrinksAPI();
+          categoryData = await fetchCategoriesDrinksAPI();
+          setCategories(categoryData);
           setRecipes(recipeData);
         }
       } catch (error) {
@@ -42,14 +61,21 @@ function Recipes({ recipeType }) {
       }
     };
     handleFetch();
-  }, [recipeType, mapFood]);
+  }, [recipeType]);
 
   useEffect(() => {
     mapFood(recipes);
   }, [recipes, mapFood]);
 
+  useEffect(() => {
+    mapFoodByCategory(categories);
+  }, [categories, mapFoodByCategory]);
+
   return (
     <div>
+      <div>
+        {mappedCategories}
+      </div>
       {mappedRecipes}
     </div>
   );
