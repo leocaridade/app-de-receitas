@@ -16,6 +16,7 @@ function Recipes({ recipeType }) {
   const [categories, setCategories] = useState([]);
   const [mappedRecipes, setMappedRecipes] = useState([]);
   const [mappedCategories, setMappedCategories] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const mapFood = useCallback((recipeData) => {
     if (!recipeData) return;
@@ -36,14 +37,17 @@ function Recipes({ recipeType }) {
   }, []);
 
   const handleCategoryClick = async ({ target }) => {
+    setIsLoading(true);
     setRecipes([]);
     if (recipeType === 'meals') {
       const recipeData = await fetchFoodByCategoryAPI(target.innerText);
       setRecipes(recipeData);
+      setIsLoading(false);
     }
     if (recipeType === 'drinks') {
       const recipeData = await fetchDrinkByCategoryAPI(target.innerText);
       setRecipes(recipeData);
+      setIsLoading(false);
     }
   };
 
@@ -108,7 +112,7 @@ function Recipes({ recipeType }) {
         <button onClick={ handleAllCategoryClick }>All</button>
         {mappedCategories}
       </div>
-      {mappedRecipes}
+      {isLoading ? <p>Loading...</p> : mappedRecipes}
     </div>
   );
 }

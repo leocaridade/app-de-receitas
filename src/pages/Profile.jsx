@@ -1,13 +1,15 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 
 function Profile() {
+  const [userEmail, setUserEmail] = useState('');
+
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem('user'));
-    const userEmail = user ? user.email : '';
-    document.querySelector('[data-testid="profile-email"]').innerHTML = userEmail;
+    const email = user ? user.email : '';
+    setUserEmail(email);
   }, []);
 
   const handleLogoutClick = () => {
@@ -19,7 +21,7 @@ function Profile() {
       <Header title="Profile" searchBtn={ false } />
       <div>
         <p>Hello, user, this is your Profile</p>
-        <p data-testid="profile-email" />
+        <p data-testid="profile-email">{ userEmail }</p>
         <Link to="/done-recipes">
           <button data-testid="profile-done-btn">Done Recipes</button>
         </Link>
