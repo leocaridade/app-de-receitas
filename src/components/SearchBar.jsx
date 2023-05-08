@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { saveUserSearch } from '../redux/actions';
 import {
   fetchMealsByFirstLetter,
   fetchMealsByIngredient,
@@ -9,7 +11,7 @@ import {
   fetchDrinksByName,
   fetchDrinksByFirstLetter } from '../services/fetchByAttribute';
 
-function SearchBar({ attributeName }) {
+function SearchBar({ attributeName, dispatch }) {
   const [radio, setRadio] = useState('ingredient');
   const [apiResult, setApiResult] = useState([]);
   const history = useHistory();
@@ -46,6 +48,12 @@ function SearchBar({ attributeName }) {
       break;
     }
   };
+
+  useEffect(() => {
+    if (apiResult !== null) {
+      dispatch(saveUserSearch(apiResult));
+    }
+  }, [apiResult, dispatch]);
 
   useEffect(() => {
     if (apiResult.length === 1) {
@@ -109,7 +117,8 @@ function SearchBar({ attributeName }) {
 }
 
 SearchBar.propTypes = {
-  attributeName: PropTypes.string.isRequired,
-};
+  attributeName: PropTypes.string,
+  dispatch: PropTypes.func,
+}.isRequired;
 
-export default SearchBar;
+export default connect()(SearchBar);
