@@ -52,11 +52,13 @@ function SearchBar({ attributeName, dispatch }) {
   useEffect(() => {
     if (apiResult !== null) {
       dispatch(saveUserSearch(apiResult));
+      return;
     }
+    global.alert('Sorry, we haven\'t found any recipes for these filters.');
   }, [apiResult, dispatch]);
 
   useEffect(() => {
-    if (apiResult.length === 1) {
+    if (apiResult !== null && apiResult.length === 1) {
       switch (pathname) {
       case '/drinks':
         history.push(`/drinks/${apiResult[0].idDrink}`);

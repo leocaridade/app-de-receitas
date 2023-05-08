@@ -104,7 +104,7 @@ function Recipes({ recipeType, searchRecipes }) {
   }, [recipeType]);
 
   useEffect(() => {
-    if (searchRecipes.length !== 0) {
+    if (searchRecipes !== null && searchRecipes.length !== 0) {
       mapFood(searchRecipes);
     }
   }, [searchRecipes]);
