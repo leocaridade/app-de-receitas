@@ -1,24 +1,33 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
+import { useHistory } from 'react-router-dom';
 import {
-  fetchMealByFirstLetter,
-  fetchMealByIngredient,
-  fetchMealByName } from '../services/fetchByAttribute';
+  fetchMealsByFirstLetter,
+  fetchMealsByIngredient,
+  fetchMealsByName,
+  fetchDrinksByIngredient,
+  fetchDrinksByName,
+  fetchDrinksByFirstLetter } from '../services/fetchByAttribute';
 
 function SearchBar({ attributeName }) {
   const [radio, setRadio] = useState('ingredient');
+  const history = useHistory();
+  const { location: { pathname } } = history;
 
   const handleSearch = () => {
     switch (radio) {
     case 'ingredient':
-      return fetchMealByIngredient(attributeName);
+      if (pathname === '/drinks') return fetchDrinksByIngredient(attributeName);
+      return fetchMealsByIngredient(attributeName);
     case 'name':
-      return fetchMealByName(attributeName);
+      if (pathname === '/drinks') return fetchDrinksByName(attributeName);
+      return fetchMealsByName(attributeName);
     case 'firstLetter':
       if (attributeName.length !== 1) {
         return global.alert('Your search must have only 1 (one) character');
       }
-      return fetchMealByFirstLetter(attributeName);
+      if (pathname === '/drinks') return fetchDrinksByFirstLetter(attributeName);
+      return fetchMealsByFirstLetter(attributeName);
     default:
       break;
     }
