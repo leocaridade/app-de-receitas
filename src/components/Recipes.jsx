@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import {
   fetchCategoriesMealsAPI,
@@ -12,13 +12,18 @@ import {
 } from '../services/drinksAPI';
 
 function Recipes({ recipeType }) {
-  const [recipes, setRecipes] = useState([]);
-  const [categories, setCategories] = useState([]);
+  // Estados das receitas
   const [mappedRecipes, setMappedRecipes] = useState([]);
-  const [mappedCategories, setMappedCategories] = useState([]);
+  const [baseRecipes, setBaseRecipes] = useState([]);
+
+  // Estados das categorias
+  const [mappedCategories, setCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+
+  // Estado do loading
   const [isLoading, setIsLoading] = useState(false);
 
-  const mapFood = useCallback((recipeData) => {
+  const mapFood = (recipeData) => {
     if (!recipeData) return;
 
     const maxCardsNumber = 12;
@@ -34,62 +39,62 @@ function Recipes({ recipeType }) {
       </div>
     ));
     setMappedRecipes(cards);
-  }, []);
+  };
 
-  const handleCategoryClick = async ({ target }) => {
+  const handleCategoryClick = async (categoryName) => {
     setIsLoading(true);
-    setRecipes([]);
-    if (recipeType === 'meals') {
-      const recipeData = await fetchFoodByCategoryAPI(target.innerText);
-      setRecipes(recipeData);
+    if (selectedCategory === categoryName) {
+      setSelectedCategory(null);
+      mapFood(baseRecipes);
       setIsLoading(false);
-    }
-    if (recipeType === 'drinks') {
-      const recipeData = await fetchDrinkByCategoryAPI(target.innerText);
-      setRecipes(recipeData);
+    } else if (selectedCategory === null) {
+      let recipeData;
+      if (recipeType === 'meals') {
+        recipeData = await fetchFoodByCategoryAPI(categoryName);
+        setSelectedCategory(categoryName);
+      }
+      if (recipeType === 'drinks') {
+        recipeData = await fetchDrinkByCategoryAPI(categoryName);
+        setSelectedCategory(categoryName);
+      }
+      mapFood(recipeData);
       setIsLoading(false);
     }
   };
 
-  const handleAllCategoryClick = async () => {
+  const handleAllCategoryClick = () => {
     if (recipeType === 'meals') {
-      const recipeData = await fetchMealsAPI();
-      setRecipes(recipeData);
+      mapFood(baseRecipes);
     }
     if (recipeType === 'drinks') {
-      const recipeData = await fetchDrinksAPI();
-      setRecipes(recipeData);
+      mapFood(baseRecipes);
     }
   };
-
-  const mapFoodByCategory = useCallback((categoriesData) => {
-    const maxCardsNumber = 5;
-    const maxCards = categoriesData.slice(0, maxCardsNumber);
-    const cards = maxCards.map((category, index) => (
-      <div key={ index } data-testid={ `${category.strCategory}-category-filter` }>
-        <button onClick={ handleCategoryClick }>{ category.strCategory }</button>
-      </div>
-    ));
-    setMappedCategories(cards);
-  }, []);
 
   useEffect(() => {
+    console.log('use foi chamado');
     const handleFetch = async () => {
       try {
         let recipeData;
         let categoryData;
 
         if (recipeType === 'meals') {
+          const maxCardNumber = 5;
           recipeData = await fetchMealsAPI();
           categoryData = await fetchCategoriesMealsAPI();
-          setCategories(categoryData);
-          setRecipes(recipeData);
+          const slicedCategories = categoryData.slice(0, maxCardNumber);
+          setCategories(slicedCategories);
+          setBaseRecipes(recipeData);
+          mapFood(recipeData);
         }
         if (recipeType === 'drinks') {
+          const maxCardNumber = 5;
           recipeData = await fetchDrinksAPI();
           categoryData = await fetchCategoriesDrinksAPI();
-          setCategories(categoryData);
-          setRecipes(recipeData);
+          const slicedCategories = categoryData.slice(0, maxCardNumber);
+          setCategories(slicedCategories);
+          setBaseRecipes(recipeData);
+          mapFood(recipeData);
         }
       } catch (error) {
         console.error(error);
@@ -98,19 +103,25 @@ function Recipes({ recipeType }) {
     handleFetch();
   }, [recipeType]);
 
-  useEffect(() => {
-    mapFood(recipes);
-  }, [recipes, mapFood]);
-
-  useEffect(() => {
-    mapFoodByCategory(categories);
-  }, [categories, mapFoodByCategory]);
-
   return (
     <div>
       <div>
-        <button onClick={ handleAllCategoryClick }>All</button>
-        {mappedCategories}
+        <button
+          onClick={ handleAllCategoryClick }
+          data-testid="All-category-filter"
+        >
+          All
+        </button>
+        {mappedCategories.map((category, index) => (
+          <div key={ index }>
+            <button
+              onClick={ () => handleCategoryClick(category.strCategory) }
+              data-testid={ `${category.strCategory}-category-filter` }
+            >
+              {category.strCategory}
+            </button>
+          </div>
+        ))}
       </div>
       {isLoading ? <p>Loading...</p> : mappedRecipes}
     </div>
