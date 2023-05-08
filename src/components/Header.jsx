@@ -8,6 +8,7 @@ import SearchBar from './SearchBar';
 function Header({ title, searchBtn }) {
   const history = useHistory();
   const [searchInput, setInputSearch] = useState(false);
+  const [attributeName, setAttributeName] = useState('');
 
   return (
     <div>
@@ -29,8 +30,12 @@ function Header({ title, searchBtn }) {
             <input
               type="text"
               data-testid="search-input"
+              onChange={ ({ target }) => setAttributeName(target.value) }
+              value={ attributeName }
             />
-            <SearchBar />
+            <SearchBar
+              attributeName={ attributeName }
+            />
           </>
         )
       }
