@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import {
   fetchCategoriesMealsAPI,
   fetchFoodByCategoryAPI,
@@ -11,7 +12,7 @@ import {
   fetchDrinksAPI,
 } from '../services/drinksAPI';
 
-function Recipes({ recipeType }) {
+function Recipes({ recipeType, searchRecipes }) {
   // Estados das receitas
   const [mappedRecipes, setMappedRecipes] = useState([]);
   const [baseRecipes, setBaseRecipes] = useState([]);
@@ -72,7 +73,6 @@ function Recipes({ recipeType }) {
   };
 
   useEffect(() => {
-    console.log('use foi chamado');
     const handleFetch = async () => {
       try {
         let recipeData;
@@ -103,6 +103,12 @@ function Recipes({ recipeType }) {
     handleFetch();
   }, [recipeType]);
 
+  useEffect(() => {
+    if (searchRecipes.length !== 0) {
+      mapFood(searchRecipes);
+    }
+  }, [searchRecipes]);
+
   return (
     <div>
       <div>
@@ -129,7 +135,14 @@ function Recipes({ recipeType }) {
 }
 
 Recipes.propTypes = {
-  recipeType: PropTypes.string.isRequired,
-};
+  recipeType: PropTypes.string,
+  searchRecipes: PropTypes.arrayOf(
+    PropTypes.shape({}),
+  ),
+}.isRequired;
 
-export default Recipes;
+const mapStateToProps = (state) => ({
+  searchRecipes: state.recipesReducer.searchRecipes,
+});
+
+export default connect(mapStateToProps)(Recipes);
