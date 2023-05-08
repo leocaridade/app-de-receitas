@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import {
@@ -11,27 +11,56 @@ import {
 
 function SearchBar({ attributeName }) {
   const [radio, setRadio] = useState('ingredient');
+  const [apiResult, setApiResult] = useState([]);
   const history = useHistory();
   const { location: { pathname } } = history;
 
   const handleSearch = () => {
     switch (radio) {
     case 'ingredient':
-      if (pathname === '/drinks') return fetchDrinksByIngredient(attributeName);
-      return fetchMealsByIngredient(attributeName);
+      if (pathname === '/drinks') {
+        fetchDrinksByIngredient(attributeName).then(({ drinks }) => setApiResult(drinks));
+        break;
+      }
+      fetchMealsByIngredient(attributeName).then(({ meals }) => setApiResult(meals));
+      break;
     case 'name':
-      if (pathname === '/drinks') return fetchDrinksByName(attributeName);
-      return fetchMealsByName(attributeName);
+      if (pathname === '/drinks') {
+        fetchDrinksByName(attributeName).then(({ drinks }) => setApiResult(drinks));
+        break;
+      }
+      fetchMealsByName(attributeName).then(({ meals }) => setApiResult(meals));
+      break;
     case 'firstLetter':
       if (attributeName.length !== 1) {
         return global.alert('Your search must have only 1 (one) character');
       }
-      if (pathname === '/drinks') return fetchDrinksByFirstLetter(attributeName);
-      return fetchMealsByFirstLetter(attributeName);
+      if (pathname === '/drinks') {
+        fetchDrinksByFirstLetter(attributeName)
+          .then(({ drinks }) => setApiResult(drinks));
+        break;
+      }
+      fetchMealsByFirstLetter(attributeName).then(({ meals }) => setApiResult(meals));
+      break;
     default:
       break;
     }
   };
+
+  useEffect(() => {
+    if (apiResult.length === 1) {
+      switch (pathname) {
+      case '/drinks':
+        history.push(`/drinks/${apiResult[0].idDrink}`);
+        break;
+      case '/meals':
+        history.push(`/meals/${apiResult[0].idMeal}`);
+        break;
+      default:
+        break;
+      }
+    }
+  }, [apiResult, history, pathname]);
 
   return (
     <div>
