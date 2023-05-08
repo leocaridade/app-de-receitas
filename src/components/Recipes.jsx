@@ -1,7 +1,15 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { fetchCategoriesMealsAPI, fetchMealsAPI } from '../services/mealsAPI';
-import { fetchCategoriesDrinksAPI, fetchDrinksAPI } from '../services/drinksAPI';
+import {
+  fetchCategoriesMealsAPI,
+  fetchFoodByCategoryAPI,
+  fetchMealsAPI,
+} from '../services/mealsAPI';
+import {
+  fetchCategoriesDrinksAPI,
+  fetchDrinkByCategoryAPI,
+  fetchDrinksAPI,
+} from '../services/drinksAPI';
 
 function Recipes({ recipeType }) {
   const [recipes, setRecipes] = useState([]);
@@ -27,12 +35,35 @@ function Recipes({ recipeType }) {
     setMappedRecipes(cards);
   }, []);
 
+  const handleCategoryClick = async ({ target }) => {
+    setRecipes([]);
+    if (recipeType === 'meals') {
+      const recipeData = await fetchFoodByCategoryAPI(target.innerText);
+      setRecipes(recipeData);
+    }
+    if (recipeType === 'drinks') {
+      const recipeData = await fetchDrinkByCategoryAPI(target.innerText);
+      setRecipes(recipeData);
+    }
+  };
+
+  const handleAllCategoryClick = async () => {
+    if (recipeType === 'meals') {
+      const recipeData = await fetchMealsAPI();
+      setRecipes(recipeData);
+    }
+    if (recipeType === 'drinks') {
+      const recipeData = await fetchDrinksAPI();
+      setRecipes(recipeData);
+    }
+  };
+
   const mapFoodByCategory = useCallback((categoriesData) => {
     const maxCardsNumber = 5;
     const maxCards = categoriesData.slice(0, maxCardsNumber);
     const cards = maxCards.map((category, index) => (
       <div key={ index } data-testid={ `${category.strCategory}-category-filter` }>
-        <button>{ category.strCategory }</button>
+        <button onClick={ handleCategoryClick }>{ category.strCategory }</button>
       </div>
     ));
     setMappedCategories(cards);
@@ -74,6 +105,7 @@ function Recipes({ recipeType }) {
   return (
     <div>
       <div>
+        <button onClick={ handleAllCategoryClick }>All</button>
         {mappedCategories}
       </div>
       {mappedRecipes}
