@@ -10,6 +10,7 @@ function RecipeDetails({ recipeType }) {
   const [recipeDetails, setRecipeDetails] = useState([]);
   const [ingredientDetails, setIngredientDetails] = useState([]);
   const [renderButton, setRenderButton] = useState(true);
+  const [recipeInProgress, setRecipeInProgress] = useState(false);
   const history = useHistory();
 
   const recipeID = history.location.pathname.split('/')[2];
@@ -51,6 +52,12 @@ function RecipeDetails({ recipeType }) {
       const recipeExists = recipesDone.filter((recipe) => recipe.id === Number(recipeID));
       if (recipeExists.length > 0) {
         setRenderButton(false);
+      }
+    }
+    if (getLocalStorage('inProgressRecipes') !== null) {
+      const recipesInProgress = getLocalStorage('inProgressRecipes');
+      if (recipesInProgress[recipeType][recipeID]) {
+        setRecipeInProgress(true);
       }
     }
   }, [recipeID]);
@@ -118,7 +125,7 @@ function RecipeDetails({ recipeType }) {
           data-testid="start-recipe-btn"
           className="fixed bottom-0"
         >
-          Start Recipe
+          { recipeInProgress ? 'Continue Recipe' : 'Start Recipe'}
         </button>
       )}
     </div>
