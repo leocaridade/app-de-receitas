@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import copy from 'clipboard-copy';
 import { useHistory, Link } from 'react-router-dom/cjs/react-router-dom.min';
+import blackHeartIcon from '../images/blackHeartIcon.svg';
+import whiteHeartIcon from '../images/whiteHeartIcon.svg';
 import { fetchFoodByIdAPI, fetchMealsAPI } from '../services/mealsAPI';
 import { fetchDrinkByIdAPI, fetchDrinksAPI } from '../services/drinksAPI';
 import { getLocalStorage, setLocalStorage } from '../services/localStorage';
@@ -13,6 +15,7 @@ function RecipeDetails({ recipeType }) {
   const [renderButton, setRenderButton] = useState(true);
   const [recipeInProgress, setRecipeInProgress] = useState(false);
   const [isLinkCopied, setIsLinkCopied] = useState(false);
+  const [favoriteIcon, setFavoriteIcon] = useState(false);
   const history = useHistory();
 
   const MAX_RECIPE_RECOMMENDATION = 6;
@@ -43,7 +46,6 @@ function RecipeDetails({ recipeType }) {
         setBaseRecipes(baseRecipesAPI);
         setRecipeDetails(recipeDetail);
         setIngredientDetails(recipeIngredient);
-        console.log(baseRecipesAPI);
       } catch (error) {
         console.log(error);
       }
@@ -63,6 +65,14 @@ function RecipeDetails({ recipeType }) {
       const recipesInProgress = getLocalStorage('inProgressRecipes');
       if (recipesInProgress[recipeType][recipeID]) {
         setRecipeInProgress(true);
+      }
+    }
+    if (getLocalStorage('favoriteRecipes') !== null) {
+      const favoriteRecipes = getLocalStorage('favoriteRecipes');
+      const recipeExists = favoriteRecipes
+        .filter((recipe) => recipe.id === recipeID);
+      if (recipeExists.length > 0) {
+        setFavoriteIcon(true);
       }
     }
   }, [recipeID]);
@@ -85,13 +95,25 @@ function RecipeDetails({ recipeType }) {
       image: recipeDetails[0].strMealThumb || recipeDetails[0].strDrinkThumb,
     };
     let newFavoriteRecipes;
+    // Se existir, retira do localStorage e seta false no setFavoriteIcon
+    // Se nao existir, seta no localStorage e seta true no setFavoriteIcon
+
     if (getLocalStorage('favoriteRecipes') !== null) {
       const favoriteRecipes = getLocalStorage('favoriteRecipes');
-      newFavoriteRecipes = [...favoriteRecipes, favoriteObj];
+
+      if (favoriteRecipes.some((recipe) => recipe.id === favoriteObj.id)) {
+        const favoriteRecipesFiltered = favoriteRecipes
+          .filter((recipe) => recipe.id !== favoriteObj.id);
+        setLocalStorage('favoriteRecipes', favoriteRecipesFiltered);
+      } else {
+        newFavoriteRecipes = [...favoriteRecipes, favoriteObj];
+        setLocalStorage('favoriteRecipes', newFavoriteRecipes);
+      }
     } else {
       newFavoriteRecipes = [favoriteObj];
+      setLocalStorage('favoriteRecipes', newFavoriteRecipes);
     }
-    setLocalStorage('favoriteRecipes', newFavoriteRecipes);
+    setFavoriteIcon(!favoriteIcon);
   };
 
   return (
@@ -108,8 +130,11 @@ function RecipeDetails({ recipeType }) {
         id="favorite-btn"
         data-testid="favorite-btn"
         onClick={ handleFavoriteButton }
+        src={ favoriteIcon ? blackHeartIcon : whiteHeartIcon }
       >
-        Favoritar receita
+        {favoriteIcon
+          ? <img src={ blackHeartIcon } alt="favorite icon" />
+          : <img src={ whiteHeartIcon } alt="favorite icon" />}
       </button>
       {isLinkCopied && <p>Link copied!</p>}
       {recipeDetails.map((recipe, index) => (
