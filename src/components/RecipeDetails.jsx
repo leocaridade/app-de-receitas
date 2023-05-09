@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
-import { fetchFoodByIdAPI } from '../services/mealsAPI';
-import { fetchDrinkByIdAPI } from '../services/drinksAPI';
+import { fetchFoodByIdAPI, fetchMealsAPI } from '../services/mealsAPI';
+import { fetchDrinkByIdAPI, fetchDrinksAPI } from '../services/drinksAPI';
 
 function RecipeDetails({ recipeType }) {
+  const [baseRecipes, setBaseRecipes] = useState([]);
   const [recipeDetails, setRecipeDetails] = useState([]);
   const [ingredientDetails, setIngredientDetails] = useState([]);
   const history = useHistory();
@@ -13,23 +14,27 @@ function RecipeDetails({ recipeType }) {
     const recipeID = history.location.pathname.split('/')[2];
     const handleFetchDetails = async () => {
       try {
+        let baseRecipesAPI;
         let recipeDetail;
         let recipeIngredient;
         if (recipeType === 'meals') {
+          baseRecipesAPI = await fetchDrinksAPI();
           recipeDetail = await fetchFoodByIdAPI(recipeID);
           recipeIngredient = Object
             .entries(recipeDetail[0])
             .filter(([key, value]) => key.startsWith('strIngredient') && value);
         }
         if (recipeType === 'drinks') {
+          baseRecipesAPI = await fetchMealsAPI();
           recipeDetail = await fetchDrinkByIdAPI(recipeID);
           recipeIngredient = Object
             .entries(recipeDetail[0])
             .filter(([key, value]) => key.startsWith('strIngredient') && value);
         }
+        setBaseRecipes(baseRecipesAPI);
         setRecipeDetails(recipeDetail);
         setIngredientDetails(recipeIngredient);
-        console.log(recipeDetail);
+        console.log(baseRecipesAPI);
       } catch (error) {
         console.log(error);
       }
