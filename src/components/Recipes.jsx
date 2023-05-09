@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import {
   fetchCategoriesMealsAPI,
@@ -30,14 +31,16 @@ function Recipes({ recipeType, searchRecipes }) {
     const maxCardsNumber = 12;
     const maxCards = recipeData.slice(0, maxCardsNumber);
     const cards = maxCards.map((recipe, index) => (
-      <div key={ index } data-testid={ `${index}-recipe-card` }>
-        <p data-testid={ `${index}-card-name` }>{recipe.strMeal || recipe.strDrink}</p>
-        <img
-          alt="Food"
-          src={ recipe.strMealThumb || recipe.strDrinkThumb }
-          data-testid={ `${index}-card-img` }
-        />
-      </div>
+      <Link key={ index } to={ `/${recipeType}/${recipe.idMeal || recipe.idDrink}` }>
+        <div data-testid={ `${index}-recipe-card` }>
+          <p data-testid={ `${index}-card-name` }>{recipe.strMeal || recipe.strDrink}</p>
+          <img
+            alt="Food"
+            src={ recipe.strMealThumb || recipe.strDrinkThumb }
+            data-testid={ `${index}-card-img` }
+          />
+        </div>
+      </Link>
     ));
     setMappedRecipes(cards);
   };
@@ -48,7 +51,7 @@ function Recipes({ recipeType, searchRecipes }) {
       setSelectedCategory(null);
       mapFood(baseRecipes);
       setIsLoading(false);
-    } else if (selectedCategory === null) {
+    } else if (selectedCategory !== categoryName) {
       let recipeData;
       if (recipeType === 'meals') {
         recipeData = await fetchFoodByCategoryAPI(categoryName);
