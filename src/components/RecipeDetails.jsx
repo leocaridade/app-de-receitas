@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
+import { useHistory, Link } from 'react-router-dom/cjs/react-router-dom.min';
 import { fetchFoodByIdAPI, fetchMealsAPI } from '../services/mealsAPI';
 import { fetchDrinkByIdAPI, fetchDrinksAPI } from '../services/drinksAPI';
 import { getLocalStorage } from '../services/localStorage';
@@ -13,6 +13,7 @@ function RecipeDetails({ recipeType }) {
   const [recipeInProgress, setRecipeInProgress] = useState(false);
   const history = useHistory();
 
+  const MAX_RECIPE_RECOMMENDATION = 6;
   const recipeID = history.location.pathname.split('/')[2];
 
   useEffect(() => {
@@ -99,8 +100,8 @@ function RecipeDetails({ recipeType }) {
         </div>
       ))}
       <h2> Recomendações: </h2>
-      <div className="w-full overflow-x-auto whitespace-nowrap overflow-hidden">
-        {baseRecipes.slice(0, 6).map((recipe, index) => (
+      <div className="w-full overflow-x-auto whitespace-nowrap">
+        {baseRecipes.slice(0, MAX_RECIPE_RECOMMENDATION).map((recipe, index) => (
           <div
             key={ index }
             data-testid={ `${index}-recommendation-card` }
@@ -120,13 +121,15 @@ function RecipeDetails({ recipeType }) {
         ))}
       </div>
       {renderButton && (
-        <button
-          id="start-recipe-btn"
-          data-testid="start-recipe-btn"
-          className="fixed bottom-0"
-        >
-          { recipeInProgress ? 'Continue Recipe' : 'Start Recipe'}
-        </button>
+        <Link to={ `${history.location.pathname}/in-progress` }>
+          <button
+            id="start-recipe-btn"
+            data-testid="start-recipe-btn"
+            className="fixed bottom-0"
+          >
+            { recipeInProgress ? 'Continue Recipe' : 'Start Recipe'}
+          </button>
+        </Link>
       )}
     </div>
   );
