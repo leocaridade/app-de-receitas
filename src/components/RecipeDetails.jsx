@@ -4,7 +4,7 @@ import copy from 'clipboard-copy';
 import { useHistory, Link } from 'react-router-dom/cjs/react-router-dom.min';
 import { fetchFoodByIdAPI, fetchMealsAPI } from '../services/mealsAPI';
 import { fetchDrinkByIdAPI, fetchDrinksAPI } from '../services/drinksAPI';
-import { getLocalStorage } from '../services/localStorage';
+import { getLocalStorage, setLocalStorage } from '../services/localStorage';
 
 function RecipeDetails({ recipeType }) {
   const [baseRecipes, setBaseRecipes] = useState([]);
@@ -16,7 +16,8 @@ function RecipeDetails({ recipeType }) {
   const history = useHistory();
 
   const MAX_RECIPE_RECOMMENDATION = 6;
-  const linkCopiedMessageTime = 4000;
+  const LINK_COPIED_MESSAGE_TIME = 4000;
+  const LAST_LETTER = -1;
   const recipeID = history.location.pathname.split('/')[2];
 
   useEffect(() => {
@@ -70,7 +71,27 @@ function RecipeDetails({ recipeType }) {
     const URL = window.location.href;
     copy(URL);
     setIsLinkCopied(true);
-    setTimeout(() => setIsLinkCopied(false), linkCopiedMessageTime);
+    setTimeout(() => setIsLinkCopied(false), LINK_COPIED_MESSAGE_TIME);
+  };
+
+  const handleFavoriteButton = () => {
+    const favoriteObj = {
+      id: recipeDetails[0].idMeal || recipeDetails[0].idDrink,
+      type: recipeType.slice(0, LAST_LETTER),
+      nationality: recipeDetails[0].strArea || '',
+      category: recipeDetails[0].strCategory,
+      alcoholicOrNot: recipeDetails[0].strAlcoholic || '',
+      name: recipeDetails[0].strMeal || recipeDetails[0].strDrink,
+      image: recipeDetails[0].strMealThumb || recipeDetails[0].strDrinkThumb,
+    };
+    let newFavoriteRecipes;
+    if (getLocalStorage('favoriteRecipes') !== null) {
+      const favoriteRecipes = getLocalStorage('favoriteRecipes');
+      newFavoriteRecipes = [...favoriteRecipes, favoriteObj];
+    } else {
+      newFavoriteRecipes = [favoriteObj];
+    }
+    setLocalStorage('favoriteRecipes', newFavoriteRecipes);
   };
 
   return (
@@ -86,6 +107,7 @@ function RecipeDetails({ recipeType }) {
       <button
         id="favorite-btn"
         data-testid="favorite-btn"
+        onClick={ handleFavoriteButton }
       >
         Favoritar receita
       </button>
