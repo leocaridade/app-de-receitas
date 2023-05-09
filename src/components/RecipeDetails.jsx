@@ -3,15 +3,18 @@ import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 import { fetchFoodByIdAPI, fetchMealsAPI } from '../services/mealsAPI';
 import { fetchDrinkByIdAPI, fetchDrinksAPI } from '../services/drinksAPI';
+import { getLocalStorage } from '../services/localStorage';
 
 function RecipeDetails({ recipeType }) {
   const [baseRecipes, setBaseRecipes] = useState([]);
   const [recipeDetails, setRecipeDetails] = useState([]);
   const [ingredientDetails, setIngredientDetails] = useState([]);
+  const [renderButton, setRenderButton] = useState(true);
   const history = useHistory();
 
+  const recipeID = history.location.pathname.split('/')[2];
+
   useEffect(() => {
-    const recipeID = history.location.pathname.split('/')[2];
     const handleFetchDetails = async () => {
       try {
         let baseRecipesAPI;
@@ -41,6 +44,16 @@ function RecipeDetails({ recipeType }) {
     };
     handleFetchDetails();
   }, [recipeType]);
+
+  useEffect(() => {
+    if (getLocalStorage('doneRecipes') !== null) {
+      const recipesDone = getLocalStorage('doneRecipes');
+      const recipeExists = recipesDone.filter((recipe) => recipe.id === Number(recipeID));
+      if (recipeExists.length > 0) {
+        setRenderButton(false);
+      }
+    }
+  }, [recipeID]);
 
   return (
     <div>
@@ -99,13 +112,15 @@ function RecipeDetails({ recipeType }) {
           </div>
         ))}
       </div>
-      <button
-        id="start-recipe-btn"
-        data-testid="start-recipe-btn"
-        className="fixed bottom-0"
-      >
-        Start Recipe
-      </button>
+      {renderButton && (
+        <button
+          id="start-recipe-btn"
+          data-testid="start-recipe-btn"
+          className="fixed bottom-0"
+        >
+          Start Recipe
+        </button>
+      )}
     </div>
   );
 }

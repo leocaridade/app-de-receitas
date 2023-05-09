@@ -1,9 +1,9 @@
 export const getLocalStorage = (key) => {
-  if (typeof key !== 'string') {
-    const localItems = localStorage.getItem(JSON.parse(key));
-    return localItems;
-  }
-  const localItems = localStorage.getItem(key);
+  // if (typeof key === 'string') {
+  //   const localItems = JSON.parse(localStorage.getItem(key));
+  //   return localItems;
+  // }
+  const localItems = JSON.parse(localStorage.getItem(key));
   return localItems;
 };
 
