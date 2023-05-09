@@ -51,7 +51,7 @@ function Recipes({ recipeType, searchRecipes }) {
       setSelectedCategory(null);
       mapFood(baseRecipes);
       setIsLoading(false);
-    } else if (selectedCategory === null || selectedCategory !== categoryName) {
+    } else if (selectedCategory !== categoryName) {
       let recipeData;
       if (recipeType === 'meals') {
         recipeData = await fetchFoodByCategoryAPI(categoryName);
