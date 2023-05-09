@@ -8,7 +8,8 @@ import DoneRecipes from '../pages/DoneRecipes';
 import FavoriteRecipes from '../pages/FavoriteRecipes';
 import MealDetails from '../pages/MealDetails';
 import DrinkDetails from '../pages/DrinkDetails';
-import RecipeInProgress from './RecipeInProgress';
+import RecipeInProgress from '../pages/RecipeInProgress';
+
 
 export default function Routes() {
   return (
