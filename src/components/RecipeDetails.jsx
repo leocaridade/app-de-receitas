@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import copy from 'clipboard-copy';
 import { useHistory, Link } from 'react-router-dom/cjs/react-router-dom.min';
 import { fetchFoodByIdAPI, fetchMealsAPI } from '../services/mealsAPI';
 import { fetchDrinkByIdAPI, fetchDrinksAPI } from '../services/drinksAPI';
@@ -11,9 +12,11 @@ function RecipeDetails({ recipeType }) {
   const [ingredientDetails, setIngredientDetails] = useState([]);
   const [renderButton, setRenderButton] = useState(true);
   const [recipeInProgress, setRecipeInProgress] = useState(false);
+  const [isLinkCopied, setIsLinkCopied] = useState(false);
   const history = useHistory();
 
   const MAX_RECIPE_RECOMMENDATION = 6;
+  const linkCopiedMessageTime = 4000;
   const recipeID = history.location.pathname.split('/')[2];
 
   useEffect(() => {
@@ -63,12 +66,20 @@ function RecipeDetails({ recipeType }) {
     }
   }, [recipeID]);
 
+  const handleShareButton = () => {
+    const URL = window.location.href;
+    copy(URL);
+    setIsLinkCopied(true);
+    setTimeout(() => setIsLinkCopied(false), linkCopiedMessageTime);
+  };
+
   return (
     <div>
       <p>{`Hello World! Your recipe type is: ${recipeType}`}</p>
       <button
         id="share-btn"
         data-testid="share-btn"
+        onClick={ handleShareButton }
       >
         Compartilhar receita
       </button>
@@ -78,6 +89,7 @@ function RecipeDetails({ recipeType }) {
       >
         Favoritar receita
       </button>
+      {isLinkCopied && <p>Link copied!</p>}
       {recipeDetails.map((recipe, index) => (
         <div key={ index }>
           <p data-testid="recipe-title">{recipe.strDrink || recipe.strMeal}</p>
