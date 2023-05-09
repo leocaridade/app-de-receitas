@@ -7,6 +7,8 @@ function RecipeInProgress() {
   const [baseRecipes, setBaseRecipes] = useState([]);
   const [recipeDetails, setRecipeDetails] = useState([]);
   const [ingredientDetails, setIngredientDetails] = useState([]);
+  const [isChecked, setIsChecked] = useState(false);
+  const [checkboxValues, setCheckboxValues] = useState({});
   const history = useHistory();
 
   const recipeID = history.location.pathname.split('/')[2];
@@ -43,6 +45,13 @@ function RecipeInProgress() {
     handleFetchDetails();
   }, [history.location.pathname]);
 
+  const handleCheckboxChange = ({ target: { name, checked } }) => {
+    setCheckboxValues({
+      ...checkboxValues,
+      [name]: checked,
+    });
+  };
+
   return (
     <div>
       <p>{`Hello World! Your recipe type is: ${recipeType}`}</p>
@@ -56,9 +65,22 @@ function RecipeInProgress() {
           <div>
             <p>Ingredients:</p>
             {ingredientDetails.map((ingredient, i) => (
-              <p key={ i } data-testid={ `${i}-ingredient-name-and-measure` }>
+              <label key={ i } data-testid={ `${i}-ingredient-step` }>
+                <input
+                  style={ {
+                    textDecoration: (
+                      checkboxValues[`${i}-ingredient-step`]
+                        ? 'line-through solid rgb(0, 0, 0)' : ''
+                    ),
+                  } }
+                  type="checkbox"
+                  id={ `${i}-ingredient-step` }
+                  name={ `${i}-ingredient-step` }
+                  checked={ checkboxValues[`${i}-ingredient-step`] }
+                  onChange={ handleCheckboxChange }
+                />
                 {`${ingredient[1]} - ${recipe[`strMeasure${i + 1}`]}`}
-              </p>
+              </label>
             ))}
           </div>
           <p> Instructions: </p>
