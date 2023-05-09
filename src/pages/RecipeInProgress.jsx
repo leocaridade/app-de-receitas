@@ -67,6 +67,12 @@ function RecipeInProgress() {
             {ingredientDetails.map((ingredient, i) => (
               <label key={ i } data-testid={ `${i}-ingredient-step` }>
                 <input
+                  style={ {
+                    textDecoration: (
+                      checkboxValues[`${i}-ingredient-step`]
+                        ? 'line-through solid rgb(0, 0, 0)' : ''
+                    ),
+                  } }
                   type="checkbox"
                   id={ `${i}-ingredient-step` }
                   name={ `${i}-ingredient-step` }
