@@ -78,6 +78,34 @@ function RecipeDetails({ recipeType }) {
           />
         </div>
       ))}
+      <h2> Recomendações: </h2>
+      <div className="w-full overflow-x-auto whitespace-nowrap overflow-hidden">
+        {baseRecipes.slice(0, 6).map((recipe, index) => (
+          <div
+            key={ index }
+            data-testid={ `${index}-recommendation-card` }
+            className="w-1/2 inline-block"
+          >
+            <p
+              data-testid={ `${index}-recommendation-title` }
+            >
+              {recipe.strDrink || recipe.strMeal}
+            </p>
+            <img
+              src={ recipe.strDrinkThumb || recipe.strMealThumb }
+              alt="Product"
+              data-testid={ `${index}-card-img` }
+            />
+          </div>
+        ))}
+      </div>
+      <button
+        id="start-recipe-btn"
+        data-testid="start-recipe-btn"
+        className="fixed bottom-0"
+      >
+        Start Recipe
+      </button>
     </div>
   );
 }
