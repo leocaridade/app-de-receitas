@@ -66,6 +66,18 @@ function RecipeDetails({ recipeType }) {
   return (
     <div>
       <p>{`Hello World! Your recipe type is: ${recipeType}`}</p>
+      <button
+        id="share-btn"
+        data-testid="share-btn"
+      >
+        Compartilhar receita
+      </button>
+      <button
+        id="favorite-btn"
+        data-testid="favorite-btn"
+      >
+        Favoritar receita
+      </button>
       {recipeDetails.map((recipe, index) => (
         <div key={ index }>
           <p data-testid="recipe-title">{recipe.strDrink || recipe.strMeal}</p>
