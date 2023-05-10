@@ -9,8 +9,10 @@ function RecipeList({ favoriteRecipesCount, listFilter, pageType }) {
   const [favoriteRecipes, setFavoriteRecipes] = useState([]);
 
   useEffect(() => {
+    console.log('oi');
     if (pageType === 'favorite-recipes') {
       const favoriteRecipesFromLocalStorage = getLocalStorage('favoriteRecipes');
+      console.log(favoriteRecipesFromLocalStorage);
       setLocalStorageFavoriteRecipes(favoriteRecipesFromLocalStorage || []);
     }
     if (pageType === 'done-recipes') {
