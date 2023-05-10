@@ -4,7 +4,13 @@ import { Link } from 'react-router-dom/cjs/react-router-dom.min';
 import DeleteFavoriteRecipeButton from './DeleteFavoriteRecipeButton';
 import ShareButtonById from './ShareButtonById';
 
-function FavoriteRecipeCard({
+const DONE_RECIPES = 'done-recipes';
+const FAVORITE_RECIPES = 'favorite-recipes';
+
+function RecipeCard({
+  pageType,
+  tags,
+  doneDate,
   type,
   nationality,
   id,
@@ -35,6 +41,23 @@ function FavoriteRecipeCard({
           >
             { name }
           </p>
+          {pageType === DONE_RECIPES && (
+            <p
+              data-testid={ `${index}-horizontal-done-date` }
+            >
+              {`Done in: ${doneDate}`}
+            </p>
+          )}
+          {pageType === DONE_RECIPES && (
+            tags.map((tag) => (
+              <p
+                data-testid={ `${index}-${tag}-horizontal-tag` }
+                key={ tag }
+              >
+                {tag}
+              </p>
+            ))
+          )}
         </Link>
       </div>
       <ShareButtonById
@@ -42,15 +65,20 @@ function FavoriteRecipeCard({
         id={ id }
         type={ type }
       />
-      <DeleteFavoriteRecipeButton
-        testId={ favoriteTestId }
-        id={ id }
-      />
+      {pageType === FAVORITE_RECIPES && (
+        <DeleteFavoriteRecipeButton
+          testId={ favoriteTestId }
+          id={ id }
+        />
+      )}
     </div>
   );
 }
 
-FavoriteRecipeCard.propTypes = {
+RecipeCard.propTypes = {
+  pageType: PropTypes.string,
+  tags: PropTypes.arrayOf(PropTypes.shape(PropTypes.string)),
+  doneDate: PropTypes.string,
   srcImage: PropTypes.string,
   name: PropTypes.string,
   category: PropTypes.string,
@@ -60,4 +88,4 @@ FavoriteRecipeCard.propTypes = {
   id: PropTypes.string,
 }.isRequired;
 
-export default FavoriteRecipeCard;
+export default RecipeCard;
