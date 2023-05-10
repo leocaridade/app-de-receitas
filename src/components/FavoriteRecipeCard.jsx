@@ -11,6 +11,7 @@ function FavoriteRecipeCard({
   name,
   category,
   index,
+  alcoholicOrNot,
   shareTestId,
   favoriteTestId }) {
   return (
@@ -23,7 +24,8 @@ function FavoriteRecipeCard({
       <p
         data-testid={ `${index}-horizontal-top-text` }
       >
-        {type === 'meal' ? `${nationality} - ${category}` : category}
+        {type === 'meal'
+          ? `${nationality} - ${category}` : `${alcoholicOrNot} - ${category}`}
       </p>
       <p
         data-testid={ `${index}-horizontal-name` }

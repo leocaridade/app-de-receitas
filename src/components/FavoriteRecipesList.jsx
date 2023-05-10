@@ -15,20 +15,31 @@ function FavoriteRecipesList({ favoriteRecipesCount }) {
 
   return (
     <div>
-      { favoriteRecipes.map(({ id, image, category, name, type, nationality }, index) => (
-        <FavoriteRecipeCard
-          key={ `favorite-recipe-${id}` }
-          id={ id }
-          srcImage={ image }
-          category={ category }
-          nationality={ nationality }
-          type={ type }
-          name={ name }
-          index={ index }
-          shareTestId={ `${index}-horizontal-share-btn` }
-          favoriteTestId={ `${index}-horizontal-favorite-btn` }
-        />
-      )) }
+      {favoriteRecipes
+        .map(({
+          id,
+          image,
+          category,
+          name,
+          type,
+          nationality,
+          alcoholicOrNot }, index) => (
+          (
+            <FavoriteRecipeCard
+              key={ `favorite-recipe-${id}` }
+              alcoholicOrNot={ alcoholicOrNot }
+              id={ id }
+              srcImage={ image }
+              category={ category }
+              nationality={ nationality }
+              type={ type }
+              name={ name }
+              index={ index }
+              shareTestId={ `${index}-horizontal-share-btn` }
+              favoriteTestId={ `${index}-horizontal-favorite-btn` }
+            />
+          )
+        )) }
     </div>
   );
 }
