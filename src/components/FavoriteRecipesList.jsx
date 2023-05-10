@@ -10,7 +10,7 @@ function FavoriteRecipesList({ favoriteRecipesCount }) {
 
   useEffect(() => {
     const favoriteRecipesFromLocalStorage = getLocalStorage('favoriteRecipes');
-    setFavoriteRecipes(favoriteRecipesFromLocalStorage);
+    setFavoriteRecipes(favoriteRecipesFromLocalStorage || []);
   }, [favoriteRecipesCount]);
 
   return (
