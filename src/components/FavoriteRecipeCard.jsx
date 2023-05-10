@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ShareButton from './ShareButton';
 import DeleteFavoriteRecipeButton from './DeleteFavoriteRecipeButton';
+import ShareButtonById from './ShareButtonById';
 
 function FavoriteRecipeCard({
   type,
@@ -32,8 +32,10 @@ function FavoriteRecipeCard({
       >
         { name }
       </p>
-      <ShareButton
+      <ShareButtonById
         testId={ shareTestId }
+        id={ id }
+        type={ type }
       />
       <DeleteFavoriteRecipeButton
         testId={ favoriteTestId }
