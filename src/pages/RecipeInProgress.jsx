@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 import copy from 'clipboard-copy';
+import { Link } from 'react-router-dom';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
 import whiteHeartIcon from '../images/whiteHeartIcon.svg';
 import { fetchDrinkByIdAPI } from '../services/drinksAPI';
@@ -92,6 +93,7 @@ function RecipeInProgress() {
       name: recipeDetails[0].strMeal || recipeDetails[0].strDrink,
       image: recipeDetails[0].strMealThumb || recipeDetails[0].strDrinkThumb,
     };
+
     let newFavoriteRecipes;
     // Se existir, retira do localStorage e seta false no setFavoriteIcon
     // Se nao existir, seta no localStorage e seta true no setFavoriteIcon
@@ -153,6 +155,47 @@ function RecipeInProgress() {
       setIsFinishBtnEnabled(false);
     }
   }, [checkboxValues, ingredientDetails, recipeID, recipeType]);
+
+  const getCurrentDateTime = () => {
+    const now = new Date();
+    return now.toISOString();
+  };
+
+  const handleFinishButton = () => {
+    console.log(recipeDetails[0]);
+    const doneObj = {
+      id: recipeDetails[0].idMeal || recipeDetails[0].idDrink,
+      nationality: recipeDetails[0].strArea || '',
+      name: recipeDetails[0].strMeal || recipeDetails[0].strDrink,
+      category: recipeDetails[0].strCategory,
+      image: recipeDetails[0].strMealThumb || recipeDetails[0].strDrinkThumb,
+      tags: recipeDetails[0].strTags ? recipeDetails[0].strTags
+        .split(',').map((tag) => tag.trim()) : [],
+      alcoholicOrNot: recipeDetails[0].strAlcoholic || '',
+      type: recipeType.slice(0, LAST_LETTER),
+      doneDate: getCurrentDateTime(),
+    };
+
+    let newDoneRecipes;
+    // Se existir, retira do localStorage e seta false no setFavoriteIcon
+    // Se nao existir, seta no localStorage e seta true no setFavoriteIcon
+
+    if (getLocalStorage('doneRecipes') !== null) {
+      const doneRecipes = getLocalStorage('doneRecipes');
+
+      if (doneRecipes.some((recipe) => recipe.id === doneObj.id)) {
+        const doneRecipesFiltered = doneRecipes
+          .filter((recipe) => recipe.id !== doneObj.id);
+        setLocalStorage('doneRecipes', doneRecipesFiltered);
+      } else {
+        newDoneRecipes = [...doneRecipes, doneObj];
+        setLocalStorage('doneRecipes', newDoneRecipes);
+      }
+    } else {
+      newDoneRecipes = [doneObj];
+      setLocalStorage('doneRecipes', newDoneRecipes);
+    }
+  };
 
   return (
     <div>
@@ -225,13 +268,16 @@ function RecipeInProgress() {
           />
         </div>
       ))}
-      <button
-        data-testid="finish-recipe-btn"
-        className="fixed bottom-0"
-        disabled={ !isFinishBtnEnabled }
-      >
-        Finalizar
-      </button>
+      <Link to="/done-recipes">
+        <button
+          data-testid="finish-recipe-btn"
+          className="fixed bottom-0"
+          disabled={ !isFinishBtnEnabled }
+          onClick={ handleFinishButton }
+        >
+          Finalizar
+        </button>
+      </Link>
     </div>
   );
 }
