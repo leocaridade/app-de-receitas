@@ -4,14 +4,32 @@ import React, { useEffect, useState } from 'react';
 import { getLocalStorage } from '../services/localStorage';
 import FavoriteRecipeCard from './FavoriteRecipeCard';
 
-function FavoriteRecipesList({ favoriteRecipesCount }) {
-  const [favoriteRecipes,
-    setFavoriteRecipes] = useState([]);
+function FavoriteRecipesList({ favoriteRecipesCount, listFilter }) {
+  const [localStorageFavoriteRecipes, setLocalStorageFavoriteRecipes] = useState([]);
+  const [favoriteRecipes, setFavoriteRecipes] = useState([]);
 
   useEffect(() => {
     const favoriteRecipesFromLocalStorage = getLocalStorage('favoriteRecipes');
-    setFavoriteRecipes(favoriteRecipesFromLocalStorage || []);
+    setLocalStorageFavoriteRecipes(favoriteRecipesFromLocalStorage);
+
   }, [favoriteRecipesCount]);
+
+  useEffect(() => {
+    const allRecipes = localStorageFavoriteRecipes;
+    switch (listFilter) {
+    case 'All':
+      setFavoriteRecipes(allRecipes);
+      break;
+    case 'Meals':
+      setFavoriteRecipes(allRecipes.filter(({ type }) => type === 'meal'));
+      break;
+    case 'Drinks':
+      setFavoriteRecipes(allRecipes.filter(({ type }) => type === 'drink'));
+      break;
+    default:
+      break;
+    }
+  }, [listFilter, localStorageFavoriteRecipes]);
 
   return (
     <div>
@@ -46,6 +64,7 @@ function FavoriteRecipesList({ favoriteRecipesCount }) {
 
 FavoriteRecipesList.propTypes = {
   favoriteRecipesCount: PropTypes.number,
+  listFilter: PropTypes.string,
 }.isRequired;
 
 const mapStateToProps = (state) => ({
