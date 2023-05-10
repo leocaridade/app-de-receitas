@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import copy from 'clipboard-copy';
+// import copy from 'clipboard-copy';
 import { useHistory, Link } from 'react-router-dom/cjs/react-router-dom.min';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
 import whiteHeartIcon from '../images/whiteHeartIcon.svg';
 import { fetchFoodByIdAPI, fetchMealsAPI } from '../services/mealsAPI';
 import { fetchDrinkByIdAPI, fetchDrinksAPI } from '../services/drinksAPI';
 import { getLocalStorage, setLocalStorage } from '../services/localStorage';
+import ShareButton from './ShareButton';
 
 function RecipeDetails({ recipeType }) {
   const [baseRecipes, setBaseRecipes] = useState([]);
@@ -14,12 +15,10 @@ function RecipeDetails({ recipeType }) {
   const [ingredientDetails, setIngredientDetails] = useState([]);
   const [renderButton, setRenderButton] = useState(true);
   const [recipeInProgress, setRecipeInProgress] = useState(false);
-  const [isLinkCopied, setIsLinkCopied] = useState(false);
   const [favoriteIcon, setFavoriteIcon] = useState(false);
   const history = useHistory();
 
   const MAX_RECIPE_RECOMMENDATION = 6;
-  const LINK_COPIED_MESSAGE_TIME = 4000;
   const LAST_LETTER = -1;
   const recipeID = history.location.pathname.split('/')[2];
 
@@ -77,13 +76,6 @@ function RecipeDetails({ recipeType }) {
     }
   }, [recipeID]);
 
-  const handleShareButton = () => {
-    const URL = window.location.href;
-    copy(URL);
-    setIsLinkCopied(true);
-    setTimeout(() => setIsLinkCopied(false), LINK_COPIED_MESSAGE_TIME);
-  };
-
   const handleFavoriteButton = () => {
     const favoriteObj = {
       id: recipeDetails[0].idMeal || recipeDetails[0].idDrink,
@@ -119,13 +111,7 @@ function RecipeDetails({ recipeType }) {
   return (
     <div>
       <p>{`Hello World! Your recipe type is: ${recipeType}`}</p>
-      <button
-        id="share-btn"
-        data-testid="share-btn"
-        onClick={ handleShareButton }
-      >
-        Compartilhar receita
-      </button>
+      <ShareButton testId="share-btn" />
       <button
         id="favorite-btn"
         data-testid="favorite-btn"
@@ -136,7 +122,6 @@ function RecipeDetails({ recipeType }) {
           ? <img src={ blackHeartIcon } alt="favorite icon" />
           : <img src={ whiteHeartIcon } alt="favorite icon" />}
       </button>
-      {isLinkCopied && <p>Link copied!</p>}
       {recipeDetails.map((recipe, index) => (
         <div key={ index }>
           <p data-testid="recipe-title">{recipe.strDrink || recipe.strMeal}</p>
