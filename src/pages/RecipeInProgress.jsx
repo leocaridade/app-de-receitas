@@ -14,7 +14,9 @@ function RecipeInProgress() {
   const [isLinkCopied, setIsLinkCopied] = useState(false);
   const [favoriteIcon, setFavoriteIcon] = useState(false);
 
-  const [checkboxValues, setCheckboxValues] = useState([]);
+  const [checkboxValues, setCheckboxValues] = useState({});
+  const [isFinishBtnEnabled, setIsFinishBtnEnabled] = useState(false);
+
   const history = useHistory();
   const LINK_COPIED_MESSAGE_TIME = 4000;
   const LAST_LETTER = -1;
@@ -142,6 +144,16 @@ function RecipeInProgress() {
     }
   };
 
+  useEffect(() => {
+    const checkboxes = Object.values(checkboxValues[recipeType]?.[recipeID] || {});
+    const checkboxesChecked = checkboxes.filter((checked) => checked);
+    if (ingredientDetails.length === checkboxesChecked.length) {
+      setIsFinishBtnEnabled(true);
+    } else {
+      setIsFinishBtnEnabled(false);
+    }
+  }, [checkboxValues, ingredientDetails, recipeID, recipeType]);
+
   return (
     <div>
       <p>{`Hello World! Your recipe type is: ${recipeType}`}</p>
@@ -215,6 +227,8 @@ function RecipeInProgress() {
       ))}
       <button
         data-testid="finish-recipe-btn"
+        className="fixed bottom-0"
+        disabled={ !isFinishBtnEnabled }
       >
         Finalizar
       </button>
