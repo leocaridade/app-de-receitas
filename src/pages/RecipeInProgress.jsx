@@ -10,11 +10,12 @@ import { getLocalStorage, setLocalStorage } from '../services/localStorage';
 function RecipeInProgress() {
   const [recipeDetails, setRecipeDetails] = useState([]);
   const [ingredientDetails, setIngredientDetails] = useState([]);
+  const [recipeInProgress, setRecipeInProgress] = useState(false);
 
   const [isLinkCopied, setIsLinkCopied] = useState(false);
   const [favoriteIcon, setFavoriteIcon] = useState(false);
 
-  const [checkboxValues, setCheckboxValues] = useState({});
+  const [checkboxValues, setCheckboxValues] = useState([]);
   const history = useHistory();
   const LINK_COPIED_MESSAGE_TIME = 4000;
   const LAST_LETTER = -1;
@@ -64,6 +65,7 @@ function RecipeInProgress() {
       const recipesInProgress = getLocalStorage('inProgressRecipes');
       if (recipesInProgress[recipeType][recipeID]) {
         setRecipeInProgress(true);
+        setCheckboxValues(recipesInProgress[recipeType][recipeID]);
       }
     }
     if (getLocalStorage('favoriteRecipes') !== null) {
@@ -115,10 +117,20 @@ function RecipeInProgress() {
     setFavoriteIcon(!favoriteIcon);
   };
 
-  const handleCheckboxChange = ({ target: { name, checked } }) => {
-    setCheckboxValues({
-      ...checkboxValues,
-      [name]: checked,
+  const handleCheckboxChange = (event) => {
+    setCheckboxValues((prevState) => {
+      const updatedCheckboxes = {
+        ...prevState,
+        [recipeType]: {
+          ...prevState[recipeType],
+          [recipeID]: {
+            ...prevState[recipeType]?.[recipeID],
+            [event.target.name]: event.target.checked,
+          },
+        },
+      };
+      setLocalStorage('inProgressRecipes', updatedCheckboxes);
+      return updatedCheckboxes;
     });
   };
 
