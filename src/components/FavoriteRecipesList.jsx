@@ -17,7 +17,8 @@ function FavoriteRecipesList({ favoriteRecipesCount, listFilter }) {
     const allRecipes = localStorageFavoriteRecipes;
     switch (listFilter) {
     case 'All':
-      setFavoriteRecipes(allRecipes); break;
+      setFavoriteRecipes(allRecipes);
+      break;
     case 'Meals':
       setFavoriteRecipes(allRecipes.filter(({ type }) => type === 'meal'));
       break;
