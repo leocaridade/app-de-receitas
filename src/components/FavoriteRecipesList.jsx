@@ -15,12 +15,14 @@ function FavoriteRecipesList({ favoriteRecipesCount }) {
 
   return (
     <div>
-      { favoriteRecipes.map(({ id, image, category, name }, index) => (
+      { favoriteRecipes.map(({ id, image, category, name, type, nationality }, index) => (
         <FavoriteRecipeCard
           key={ `favorite-recipe-${id}` }
           id={ id }
           srcImage={ image }
           category={ category }
+          nationality={ nationality }
+          type={ type }
           name={ name }
           index={ index }
           shareTestId={ `${index}-horizontal-share-btn` }

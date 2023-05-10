@@ -4,6 +4,8 @@ import ShareButton from './ShareButton';
 import DeleteFavoriteRecipeButton from './DeleteFavoriteRecipeButton';
 
 function FavoriteRecipeCard({
+  type,
+  nationality,
   id,
   srcImage,
   name,
@@ -21,7 +23,7 @@ function FavoriteRecipeCard({
       <p
         data-testid={ `${index}-horizontal-top-text` }
       >
-        { category }
+        {type === 'meal' ? `${nationality} - ${category}` : category}
       </p>
       <p
         data-testid={ `${index}-horizontal-name` }

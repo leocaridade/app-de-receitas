@@ -23,6 +23,7 @@ function DeleteFavoriteRecipeButton({ id, testId, dispatch }) {
     <button
       onClick={ handleDeleteFavoriteRecipe }
       data-testid={ testId }
+      src={ blackHeartIcon }
     >
       <img src={ blackHeartIcon } alt="Unfavorite Button" />
     </button>

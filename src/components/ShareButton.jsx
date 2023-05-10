@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import copy from 'clipboard-copy';
 import PropTypes from 'prop-types';
+import shareSVG from '../images/shareIcon.svg';
 
 const LINK_COPIED_MESSAGE_TIME = 4000;
 
@@ -20,8 +21,9 @@ function ShareButton({ testId }) {
         onClick={ handleShareButton }
         type="button"
         data-testid={ testId }
+        src={ shareSVG }
       >
-        Compartilhar Receita
+        <img src={ shareSVG } alt="share" />
       </button>
       {isLinkCopied && <p>Link copied!</p>}
     </>
