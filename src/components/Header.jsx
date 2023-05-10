@@ -13,8 +13,12 @@ function Header({ title, searchBtn }) {
   return (
     <div>
       <h1 data-testid="page-title">{title}</h1>
-      <button onClick={ () => history.push('/profile') }>
-        <img data-testid="profile-top-btn" src={ profileIcon } alt="profile-button" />
+      <button
+        onClick={ () => history.push('/profile') }
+        src={ profileIcon }
+        data-testid="profile-top-btn"
+      >
+        <img src={ profileIcon } alt="profile-button" />
       </button>
       {
         searchBtn

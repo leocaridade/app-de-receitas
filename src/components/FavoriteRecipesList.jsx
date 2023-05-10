@@ -11,6 +11,7 @@ function FavoriteRecipesList({ favoriteRecipesCount, listFilter }) {
   useEffect(() => {
     const favoriteRecipesFromLocalStorage = getLocalStorage('favoriteRecipes');
     setLocalStorageFavoriteRecipes(favoriteRecipesFromLocalStorage);
+
   }, [favoriteRecipesCount]);
 
   useEffect(() => {
