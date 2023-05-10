@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom/cjs/react-router-dom.min';
 import Header from '../components/Header';
 import FavoriteRecipesList from '../components/RecipesList';
 
 function DoneRecipes() {
   const [filter, setFilter] = useState('All');
   const [pageType, setPageType] = useState('');
+  const location = useLocation();
 
   useEffect(() => {
     // Current URL
-    const URL = window.location.href.split('/')[3];
+    const URL = location.pathname.split('/')[1];
     setPageType(URL);
   }, []);
 

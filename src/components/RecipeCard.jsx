@@ -48,7 +48,7 @@ function RecipeCard({
               {`Done in: ${doneDate}`}
             </p>
           )}
-          {pageType === DONE_RECIPES && (
+          {pageType === DONE_RECIPES && Array.isArray(tags) && (
             tags.map((tag) => (
               <p
                 data-testid={ `${index}-${tag}-horizontal-tag` }
