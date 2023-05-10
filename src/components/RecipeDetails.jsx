@@ -8,6 +8,9 @@ import { fetchFoodByIdAPI, fetchMealsAPI } from '../services/mealsAPI';
 import { fetchDrinkByIdAPI, fetchDrinksAPI } from '../services/drinksAPI';
 import { getLocalStorage, setLocalStorage } from '../services/localStorage';
 import ShareButton from './ShareButton';
+import Recommendations from './Recommendations';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 
 function RecipeDetails({ recipeType }) {
   const [baseRecipes, setBaseRecipes] = useState([]);
@@ -18,7 +21,6 @@ function RecipeDetails({ recipeType }) {
   const [favoriteIcon, setFavoriteIcon] = useState(false);
   const history = useHistory();
 
-  const MAX_RECIPE_RECOMMENDATION = 6;
   const LAST_LETTER = -1;
   const recipeID = history.location.pathname.split('/')[2];
 
@@ -62,7 +64,7 @@ function RecipeDetails({ recipeType }) {
     }
     if (getLocalStorage('inProgressRecipes') !== null) {
       const recipesInProgress = getLocalStorage('inProgressRecipes');
-      if (recipesInProgress[recipeType][recipeID]) {
+      if (recipesInProgress[recipeType] && recipesInProgress[recipeType][recipeID]) {
         setRecipeInProgress(true);
       }
     }
@@ -156,25 +158,10 @@ function RecipeDetails({ recipeType }) {
         </div>
       ))}
       <h2> Recomendações: </h2>
-      <div className="w-full overflow-x-auto whitespace-nowrap">
-        {baseRecipes.slice(0, MAX_RECIPE_RECOMMENDATION).map((recipe, index) => (
-          <div
-            key={ index }
-            data-testid={ `${index}-recommendation-card` }
-            className="w-1/2 inline-block"
-          >
-            <p
-              data-testid={ `${index}-recommendation-title` }
-            >
-              {recipe.strDrink || recipe.strMeal}
-            </p>
-            <img
-              src={ recipe.strDrinkThumb || recipe.strMealThumb }
-              alt="Product"
-              data-testid={ `${index}-card-img` }
-            />
-          </div>
-        ))}
+      <div>
+        <Recommendations
+          baseRecipes={ baseRecipes }
+        />
       </div>
       {renderButton && (
         <Link to={ `${history.location.pathname}/in-progress` }>

@@ -1,9 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from '../components/Header';
-import FavoriteRecipesList from '../components/FavoriteRecipesList';
+import FavoriteRecipesList from '../components/RecipesList';
 
 function FavoriteRecipes() {
   const [filter, setFilter] = useState('All');
+  const [pageType, setPageType] = useState('');
+
+  useEffect(() => {
+    // Current URL
+    const URL = window.location.href.split('/')[3];
+    setPageType(URL);
+  }, []);
 
   const handleFilterClick = ({ target: { innerText } }) => {
     setFilter(innerText);
@@ -34,7 +41,7 @@ function FavoriteRecipes() {
       >
         Drinks
       </button>
-      <FavoriteRecipesList listFilter={ filter } />
+      <FavoriteRecipesList listFilter={ filter } pageType={ pageType } />
     </>
   );
 }

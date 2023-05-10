@@ -2,17 +2,22 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import { getLocalStorage } from '../services/localStorage';
-import FavoriteRecipeCard from './FavoriteRecipeCard';
+import RecipeCard from './RecipeCard';
 
-function FavoriteRecipesList({ favoriteRecipesCount, listFilter }) {
+function RecipeList({ favoriteRecipesCount, listFilter, pageType }) {
   const [localStorageFavoriteRecipes, setLocalStorageFavoriteRecipes] = useState([]);
   const [favoriteRecipes, setFavoriteRecipes] = useState([]);
 
   useEffect(() => {
-    const favoriteRecipesFromLocalStorage = getLocalStorage('favoriteRecipes');
-    setLocalStorageFavoriteRecipes(favoriteRecipesFromLocalStorage);
-
-  }, [favoriteRecipesCount]);
+    if (pageType === 'favorite-recipes') {
+      const favoriteRecipesFromLocalStorage = getLocalStorage('favoriteRecipes');
+      setLocalStorageFavoriteRecipes(favoriteRecipesFromLocalStorage || []);
+    }
+    if (pageType === 'done-recipes') {
+      const doneRecipesFromLocalStorage = getLocalStorage('doneRecipes');
+      setLocalStorageFavoriteRecipes(doneRecipesFromLocalStorage || []);
+    }
+  }, [favoriteRecipesCount, pageType]);
 
   useEffect(() => {
     const allRecipes = localStorageFavoriteRecipes;
@@ -35,6 +40,8 @@ function FavoriteRecipesList({ favoriteRecipesCount, listFilter }) {
     <div>
       {favoriteRecipes
         .map(({
+          tags,
+          doneDate,
           id,
           image,
           category,
@@ -43,8 +50,11 @@ function FavoriteRecipesList({ favoriteRecipesCount, listFilter }) {
           nationality,
           alcoholicOrNot }, index) => (
           (
-            <FavoriteRecipeCard
-              key={ `favorite-recipe-${id}` }
+            <RecipeCard
+              pageType={ pageType }
+              tags={ tags }
+              doneDate={ doneDate }
+              key={ `recipe-${id}` }
               alcoholicOrNot={ alcoholicOrNot }
               id={ id }
               srcImage={ image }
@@ -62,13 +72,14 @@ function FavoriteRecipesList({ favoriteRecipesCount, listFilter }) {
   );
 }
 
-FavoriteRecipesList.propTypes = {
+RecipeList.propTypes = {
   favoriteRecipesCount: PropTypes.number,
   listFilter: PropTypes.string,
+  pageType: PropTypes.string,
 }.isRequired;
 
 const mapStateToProps = (state) => ({
   favoriteRecipesCount: state.recipesReducer.countFavoriteList,
 });
 
-export default connect(mapStateToProps)(FavoriteRecipesList);
+export default connect(mapStateToProps)(RecipeList);
