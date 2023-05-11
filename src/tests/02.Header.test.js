@@ -1,33 +1,38 @@
 import React from 'react';
-import { screen, render } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import renderWithRouter from './helpers/renderWithRouter';
-import Drinks from '../pages/Drinks';
+import Meals from '../pages/Meals';
+import { renderWithRouterAndRedux } from './helpers/renderWithRouter';
 
+const initialState = { recipesReducer: { searchRecipes: [], countFavoriteList: 0 } };
+const initialEntries = ['/meals'];
 describe('Testa o elemento Header', () => {
-  test('Verifica se os elementos são renderizados na tela', () => {
-    render(<Drinks />);
-    const title = screen.getByTestId('page-title');
-    const profileBtn = screen.getByTestId('profile-top-btn');
-    const searchBtn = screen.getByTestId('search-top-btn');
-    expect(title).toBeInTheDocument();
-    expect(profileBtn).toBeInTheDocument();
-    expect(searchBtn).toBeInTheDocument();
-  });
-
   test('Verifica se muda para a pagina Profile ao clicar no botão profile', () => {
-    const { history } = renderWithRouter(<Drinks />);
+    const { history } = renderWithRouterAndRedux(
+      <Meals />,
+      { initialState, initialEntries },
+    );
+    expect(history.location.pathname).toBe('/meals');
+    screen.getByRole('heading', { name: /meals/i });
     const profileBtn = screen.getByTestId('profile-top-btn');
     userEvent.click(profileBtn);
     const { pathname } = history.location;
     expect(pathname).toBe('/profile');
   });
-
-  test('Verifica se aparece um input de search ao clicar no botão search', () => {
-    renderWithRouter(<Drinks />);
-    const searchBtn = screen.getByTestId('search-top-btn');
+  test('Verifica se muda para a pagina Profile ao clicar no botão search', () => {
+    const { history } = renderWithRouterAndRedux(
+      <Meals />,
+      { initialState, initialEntries },
+    );
+    expect(history.location.pathname).toBe('/meals');
+    screen.getByRole('heading', { name: /meals/i });
+    const searchBtn = screen.getByRole('button', { name: /search-icon/i });
     userEvent.click(searchBtn);
+    const radioIngredient = screen.getByTestId('ingredient-search-radio');
+    userEvent.click(radioIngredient);
     const inputSearch = screen.getByTestId('search-input');
-    expect(inputSearch).toBeInTheDocument();
+    userEvent.type(inputSearch, 'beef');
+    const submitBtn = screen.getByTestId('exec-search-btn');
+    userEvent.click(submitBtn);
   });
 });
