@@ -1,5 +1,6 @@
 import React from 'react';
-import { screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { screen, waitFor } from '@testing-library/react';
 import { renderWithRouterAndRedux } from './helpers/renderWithRouter';
 import FavoriteRecipes from '../pages/FavoriteRecipes';
 
@@ -48,9 +49,31 @@ describe('Teste a tela de receitas favoritas', () => {
   });
 
   test('Testa se os cards de receitas favoritas são renderizados', async () => {
+    const titleObj1 = await screen.findByTestId('0-horizontal-name');
     const imgObj1 = await screen.findByTestId('0-horizontal-image');
-    const imgObj2 = await screen.findByTestId('1-horizontal-image');
     expect(imgObj1).toBeInTheDocument();
+    expect(titleObj1).toBeInTheDocument();
+
+    const titleObj2 = await screen.findByTestId('1-horizontal-name');
+    const imgObj2 = await screen.findByTestId('1-horizontal-image');
     expect(imgObj2).toBeInTheDocument();
+    expect(titleObj2).toBeInTheDocument();
+  });
+
+  test('Testa a handleClick do filtro de receitas', async () => {
+    const mealFilterBtn = await screen.findByTestId('filter-by-meal-btn');
+    const titleObj2 = await screen.findByTestId('1-horizontal-name');
+    const imgObj2 = await screen.findByTestId('1-horizontal-image');
+
+    expect(mealFilterBtn).toBeInTheDocument();
+    expect(titleObj2).toBeInTheDocument();
+    expect(imgObj2).toBeInTheDocument();
+
+    userEvent.click(mealFilterBtn);
+
+    waitFor(() => {
+      expect(titleObj2).not.toBeInTheDocument();
+      expect(imgObj2).not.toBeInTheDocument();
+    });
   });
 });
