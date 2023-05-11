@@ -26,30 +26,26 @@ function RecipeDetails({ recipeType }) {
 
   useEffect(() => {
     const handleFetchDetails = async () => {
-      try {
-        let baseRecipesAPI;
-        let recipeDetail;
-        let recipeIngredient;
-        if (recipeType === 'meals') {
-          baseRecipesAPI = await fetchDrinksAPI();
-          recipeDetail = await fetchFoodByIdAPI(recipeID);
-          recipeIngredient = Object
-            .entries(recipeDetail[0])
-            .filter(([key, value]) => key.startsWith('strIngredient') && value);
-        }
-        if (recipeType === 'drinks') {
-          baseRecipesAPI = await fetchMealsAPI();
-          recipeDetail = await fetchDrinkByIdAPI(recipeID);
-          recipeIngredient = Object
-            .entries(recipeDetail[0])
-            .filter(([key, value]) => key.startsWith('strIngredient') && value);
-        }
-        setBaseRecipes(baseRecipesAPI);
-        setRecipeDetails(recipeDetail);
-        setIngredientDetails(recipeIngredient);
-      } catch (error) {
-        console.log(error);
+      let baseRecipesAPI;
+      let recipeDetail;
+      let recipeIngredient;
+      if (recipeType === 'meals') {
+        baseRecipesAPI = await fetchDrinksAPI();
+        recipeDetail = await fetchFoodByIdAPI(recipeID);
+        recipeIngredient = Object
+          .entries(recipeDetail[0])
+          .filter(([key, value]) => key.startsWith('strIngredient') && value);
       }
+      if (recipeType === 'drinks') {
+        baseRecipesAPI = await fetchMealsAPI();
+        recipeDetail = await fetchDrinkByIdAPI(recipeID);
+        recipeIngredient = Object
+          .entries(recipeDetail[0])
+          .filter(([key, value]) => key.startsWith('strIngredient') && value);
+      }
+      setBaseRecipes(baseRecipesAPI);
+      setRecipeDetails(recipeDetail);
+      setIngredientDetails(recipeIngredient);
     };
     handleFetchDetails();
   }, [recipeType]);
