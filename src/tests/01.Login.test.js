@@ -1,7 +1,7 @@
 import React from 'react';
 import userEvent from '@testing-library/user-event';
 import { render, screen } from '@testing-library/react';
-import renderWithRouter from './helpers/renderWithRouter';
+import { renderWithRouterAndRedux } from './helpers/renderWithRouter';
 import Login from '../pages/Login';
 
 const validEmail = 'email@teste.com';
@@ -22,7 +22,10 @@ describe('Teste a página de login', () => {
   });
 
   test('Testa se quando digita o botão é habilitado e passa para a proxima pagina', () => {
-    const { history } = renderWithRouter(<Login />);
+    const { history } = renderWithRouterAndRedux(
+      <Login />,
+      { },
+    );
     const getInputEmail = screen.getByTestId('email-input');
     const getInputPassword = screen.getByTestId('password-input');
     const getButton = screen.getByRole('button', {
