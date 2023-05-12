@@ -41,7 +41,7 @@ function Login() {
 
   return (
     <div
-      className="bg-[#ffa94d]
+      className="bg-gradient-to-b from-[#ffa94d] from-35% to-[#66d1f5] to-70%
       h-screen w-screen flex flex-col justify-evenly"
     >
       <img src={ recipesLogo } alt="Recipes Logo" className="mb-20" />
