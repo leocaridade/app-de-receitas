@@ -5,12 +5,13 @@ import Recipes from '../components/Recipes';
 
 function Meals() {
   return (
-    <>
-      <Header title="Meals" searchBtn />
-      <div>Meals</div>
-      <Recipes recipeType="meals" />
-      <Footer />
-    </>
+    <div className="h-full bg-[#ffa94d]">
+      <div className="h-screen">
+        <Header title="Meals" searchBtn />
+        <Recipes recipeType="meals" />
+        <Footer />
+      </div>
+    </div>
   );
 }
 

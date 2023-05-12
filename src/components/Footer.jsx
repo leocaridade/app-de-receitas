@@ -7,10 +7,8 @@ function Footer() {
   return (
     <div
       data-testid="footer"
-      style={ {
-        bottom: 0,
-        position: 'fixed',
-      } }
+      className="
+      bottom-0 fixed flex flex-row justify-between w-full px-[10px] bg-purple-600 py-1"
     >
       <Link to="/drinks">
         <img src={ drinkIcon } alt="drink icon" data-testid="drinks-bottom-btn" />

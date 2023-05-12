@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 import { setLocalStorage } from '../services/localStorage';
+import recipesLogo from '../images/recipesLogo.png';
 
 function Login() {
   const history = useHistory();
@@ -39,30 +40,39 @@ function Login() {
   };
 
   return (
-    <div>
-      <form>
-        <input
-          type="email"
-          name="email"
-          data-testid="email-input"
-          placeholder="Digite seu e-mail"
-          onChange={ handleFormChange }
-        />
-        <input
-          type="text"
-          name="password"
-          data-testid="password-input"
-          placeholder="Digite sua senha"
-          onChange={ handleFormChange }
-        />
-        <button
-          data-testid="login-submit-btn"
-          disabled={ !validLogin }
-          onClick={ handleLoginClick }
-        >
-          Enter
-        </button>
-      </form>
+    <div
+      className="bg-[#ffa94d]
+      h-screen w-screen flex flex-col justify-evenly"
+    >
+      <img src={ recipesLogo } alt="Recipes Logo" className="mb-20" />
+      <div className=" w-full flex justify-center">
+        <form className="flex flex-col w-3/4">
+          <input
+            type="email"
+            name="email"
+            data-testid="email-input"
+            placeholder="Digite seu e-mail"
+            onChange={ handleFormChange }
+            className="px-4 py-2 mb-4 rounded-lg"
+          />
+          <input
+            type="text"
+            name="password"
+            data-testid="password-input"
+            placeholder="Digite sua senha"
+            onChange={ handleFormChange }
+            className="px-4 py-2 mb-4 rounded-lg"
+          />
+          <button
+            data-testid="login-submit-btn"
+            disabled={ !validLogin }
+            onClick={ handleLoginClick }
+            className="bg-white rounded-lg py-1"
+          >
+            Enter
+          </button>
+        </form>
+      </div>
     </div>
   );
 }

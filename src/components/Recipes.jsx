@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import '../index.css';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import {
@@ -31,16 +32,27 @@ function Recipes({ recipeType, searchRecipes }) {
     const maxCardsNumber = 12;
     const maxCards = recipeData.slice(0, maxCardsNumber);
     const cards = maxCards.map((recipe, index) => (
-      <Link key={ index } to={ `/${recipeType}/${recipe.idMeal || recipe.idDrink}` }>
-        <div data-testid={ `${index}-recipe-card` }>
-          <p data-testid={ `${index}-card-name` }>{recipe.strMeal || recipe.strDrink}</p>
-          <img
-            alt="Food"
-            src={ recipe.strMealThumb || recipe.strDrinkThumb }
-            data-testid={ `${index}-card-img` }
-          />
-        </div>
-      </Link>
+      <div key={ index } className="w-1/2 py-2 px-2">
+        <Link to={ `/${recipeType}/${recipe.idMeal || recipe.idDrink}` }>
+          <div
+            data-testid={ `${index}-recipe-card` }
+            className="bg-white rounded-md card-shadow"
+          >
+            <img
+              alt="Food"
+              src={ recipe.strMealThumb || recipe.strDrinkThumb }
+              data-testid={ `${index}-card-img` }
+              className="rounded-t-md"
+            />
+            <p
+              data-testid={ `${index}-card-name` }
+              className="pl-3 pb-2"
+            >
+              {recipe.strMeal || recipe.strDrink}
+            </p>
+          </div>
+        </Link>
+      </div>
     ));
     setMappedRecipes(cards);
   };
@@ -113,26 +125,30 @@ function Recipes({ recipeType, searchRecipes }) {
   }, [searchRecipes]);
 
   return (
-    <div>
-      <div>
+    <div className="bg-[#ffa94d]">
+      <div className="flex flex-row flex-wrap justify-center pt-6">
         <button
           onClick={ handleAllCategoryClick }
           data-testid="All-category-filter"
+          className="rounded-md py-1 px-2 w-[30%] my-1 mx-1 teste-shadow bg-white"
         >
           All
         </button>
         {mappedCategories.map((category, index) => (
-          <div key={ index }>
+          <div key={ index } className="w-[30%] my-1 mx-1">
             <button
               onClick={ () => handleCategoryClick(category.strCategory) }
               data-testid={ `${category.strCategory}-category-filter` }
+              className=" py-1 px-2 w-full teste-shadow rounded-md bg-white"
             >
               {category.strCategory}
             </button>
           </div>
         ))}
       </div>
-      {isLoading ? <p>Loading...</p> : mappedRecipes}
+      <div className="w-full flex flex-row flex-wrap pb-10">
+        {isLoading ? <p>Loading...</p> : mappedRecipes}
+      </div>
     </div>
   );
 }
