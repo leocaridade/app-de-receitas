@@ -107,45 +107,66 @@ function RecipeDetails({ recipeType }) {
   };
 
   return (
-    <div className="flex-column justify-center">
-      <div>
-        <ShareButton testId="share-btn" />
-        <button
-          id="favorite-btn"
-          data-testid="favorite-btn"
-          onClick={ handleFavoriteButton }
-          src={ favoriteIcon ? blackHeartIcon : whiteHeartIcon }
-        >
-          {favoriteIcon
-            ? <img src={ blackHeartIcon } alt="favorite icon" />
-            : <img src={ whiteHeartIcon } alt="favorite icon" />}
-        </button>
-      </div>
+    <div className="h-screen w-screen flex flex-col">
+      {/* <section> */}
       {recipeDetails.map((recipe, index) => (
         <div
           key={ index }
-          className="flex-col justify-items-center"
+          className="bg-red-500 flex flex-col"
         >
-          <p
-            data-testid="recipe-title"
-            // className={}
+          <div className="flex justify-end">
+            <ShareButton testId="share-btn" />
+            <button
+              id="favorite-btn"
+              data-testid="favorite-btn"
+              onClick={ handleFavoriteButton }
+              src={ favoriteIcon ? blackHeartIcon : whiteHeartIcon }
+            >
+              {favoriteIcon
+                ? <img src={ blackHeartIcon } alt="favorite icon" />
+                : <img src={ whiteHeartIcon } alt="favorite icon" />}
+            </button>
+          </div>
+          <section
+            className="flex flex-col justify-center items-center"
           >
-            {recipe.strDrink || recipe.strMeal}
-          </p>
-          {recipe.strAlcoholic && (
-            <p data-testid="recipe-category">{recipe.strAlcoholic}</p>
-          )}
-          <p data-testid="recipe-category">{recipe.strCategory}</p>
-          <div>
-            <p>Ingredients:</p>
+            <p
+              data-testid="recipe-title"
+              className="text-2xl font-bold text-center"
+            >
+              {recipe.strDrink || recipe.strMeal}
+            </p>
+            {
+              recipe.strAlcoholic && (
+                <p data-testid="recipe-category">{recipe.strAlcoholic}</p>
+              )
+            }
+            <p data-testid="recipe-category">{recipe.strCategory}</p>
+          </section>
+          <div
+            className="box-border border-2 border-black rounded-lg bg-white p-2 m-2"
+          >
+            <p
+              className="text-2xl font-bold text-center"
+            >
+              Ingredients:
+            </p>
             {ingredientDetails.map((ingredient, i) => (
               <p key={ i } data-testid={ `${i}-ingredient-name-and-measure` }>
                 {`${ingredient[1]} - ${recipe[`strMeasure${i + 1}`]}`}
               </p>
             ))}
           </div>
-          <p> Instructions: </p>
-          <p data-testid="instructions">{recipe.strInstructions}</p>
+          <div
+            className="box-border border-2 border-black rounded-lg bg-white p-2 m-2"
+          >
+            <p
+              className="text-2xl font-bold text-center"
+            >
+              Instructions:
+            </p>
+            <p data-testid="instructions">{recipe.strInstructions}</p>
+          </div>
           {recipeType === 'meals' && (
             <iframe
               data-testid="video"
@@ -160,6 +181,7 @@ function RecipeDetails({ recipeType }) {
             alt="Product"
             data-testid="recipe-photo"
           />
+
         </div>
       ))}
       <h2> Recomendações: </h2>
