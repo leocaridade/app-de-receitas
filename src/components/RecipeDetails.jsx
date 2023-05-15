@@ -115,7 +115,7 @@ function RecipeDetails({ recipeType }) {
           className="flex flex-col"
         >
           <section
-            className="bg-cover bg-center text-white"
+            className="bg-cover bg-center text-white h-40"
             style={ {
               backgroundImage: `url(${recipe.strDrinkThumb || recipe.strMealThumb})`,
             } }
@@ -140,7 +140,7 @@ function RecipeDetails({ recipeType }) {
             >
               <p
                 data-testid="recipe-title"
-                className="text-2xl font-bold text-center"
+                className="text-5xl font-bold text-center"
               >
                 {recipe.strDrink || recipe.strMeal}
               </p>
