@@ -19,14 +19,14 @@ function DoneRecipes() {
   };
 
   return (
-    <div className="h-screen">
-      <Header title="Done Recipes" searchBtn={false} />
+    <div className="h-screen bg-[#FAF6F4]">
+      <Header title="Done Recipes" searchBtn={ false } />
       <div className="flex flex-row w-full justify-center mt-6">
         <div className="justify-center items-center flex flex-row w-[80%] mb-2">
           <button
             id="filter-by-all-btn"
             data-testid="filter-by-all-btn"
-            onClick={handleFilterClick}
+            onClick={ handleFilterClick }
             className="py-1 px-2 w-full teste-shadow rounded-md bg-white mx-1"
           >
             All

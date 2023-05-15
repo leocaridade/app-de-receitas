@@ -49,7 +49,7 @@ function Header({ title, searchBtn }) {
       flex-row
       w-full
       justify-between
-      px-5 pt-2 pb-2 ${title === 'Meals' ? 'bg-[#ffa94d]' : 'bg-[#66d9e8]'}
+      px-5 pt-2 pb-2 ${title === 'Meals' ? 'bg-[#CD6D2D]' : 'bg-[#CD6D2D]'}
       ` }
       >
         <div className="h-full flex flex-row">
@@ -98,13 +98,13 @@ function Header({ title, searchBtn }) {
         justify-center
         pt-2
         items-center ${title === 'Meals' ? 'bg-[#fff4e6]' : ''}
-        ${title === 'Drinks' ? 'bg-[#e3fafc]' : ''}
+        ${title === 'Drinks' ? 'bg-[#fff4e6]' : ''}
         ` }
       >
         <img
           src={ iconSrc }
           alt="Page Logo"
-          className="h-[80%]"
+          className="h-[80%] pt-2"
         />
         <h1 data-testid="page-title">{title}</h1>
       </div>

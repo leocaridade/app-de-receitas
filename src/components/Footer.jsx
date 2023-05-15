@@ -12,14 +12,14 @@ function Footer() {
   useEffect(() => {
     switch (pathname) {
     case 'meals':
-      setFooterColor('bg-[#ffa94d]');
+      setFooterColor('bg-[#A15D30]');
       break;
     case 'drinks':
-      setFooterColor('bg-[#66d9e8]');
+      setFooterColor('bg-[#A15D30]');
       break;
     default:
       setFooterColor(
-        'bg-gradient-to-r from-[#66d9e8] to-[#ffa94d] ',
+        'bg-gradient-to-r from-[#A15D30] to-[#A15D30] ',
       );
     }
   }, [pathname]);

@@ -125,7 +125,7 @@ function Recipes({ recipeType, searchRecipes }) {
   }, [searchRecipes]);
 
   return (
-    <div className={ `${recipeType === 'meals' ? 'bg-[#fff4e6]' : 'bg-[#e3fafc]'}` }>
+    <div className={ `${recipeType === 'meals' ? 'bg-[#fff4e6]' : 'bg-[#fff4e6]'}` }>
       <div className="flex flex-row flex-wrap justify-center" id="categories-div">
         <button
           onClick={ handleAllCategoryClick }

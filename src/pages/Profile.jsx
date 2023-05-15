@@ -19,7 +19,7 @@ function Profile() {
   };
 
   return (
-    <div className="h-screen">
+    <div className="h-screen bg-[#FAF6F4]">
       <Header title="Profile" searchBtn={ false } />
       <div
         className="flex flex-col h-[75%] items-center justify-between py-20"
@@ -31,14 +31,14 @@ function Profile() {
         <div className="flex flex-col justify-items-start items-center w-2/3 h-3/5">
           <button
             data-testid="profile-done-btn"
-            className="bg-slate-100 py-1 px-2 rounded-md my-2 w-full"
+            className="py-1 px-2 rounded-md my-2 w-full bg-white teste-shadow"
             onClick={ () => history.push('/done-recipes') }
           >
             Done Recipes
           </button>
           <button
             data-testid="profile-favorite-btn"
-            className="bg-slate-100 py-1 px-2 rounded-md my-2 w-full"
+            className="py-1 px-2 rounded-md my-2 w-full bg-white teste-shadow"
             onClick={ () => history.push('/favorite-recipes') }
           >
             Favorite Recipes
@@ -46,7 +46,7 @@ function Profile() {
           <button
             data-testid="profile-logout-btn"
             onClick={ handleLogoutClick }
-            className="bg-slate-100 py-1 px-2 rounded-md my-2 w-full"
+            className="py-1 px-2 rounded-md my-2 w-full bg-white teste-shadow"
           >
             Logout
           </button>

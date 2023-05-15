@@ -25,7 +25,7 @@ function RecipeCard({
   favoriteTestId }) {
   const history = useHistory();
   return (
-    <div className="flex flex-row mx-6 rounded-md card-shadow mb-4 mt-2">
+    <div className="flex flex-row mx-6 rounded-md card-shadow mb-4 mt-2 bg-[#FFF]">
       <div className="max-w-[50%]">
         <img
           src={ srcImage }

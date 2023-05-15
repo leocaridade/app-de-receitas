@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 // import copy from 'clipboard-copy';
-import { useHistory, Link } from 'react-router-dom/cjs/react-router-dom.min';
+import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
 import whiteHeartIcon from '../images/whiteHeartIcon.svg';
 import { fetchFoodByIdAPI, fetchMealsAPI } from '../services/mealsAPI';
@@ -112,36 +112,45 @@ function RecipeDetails({ recipeType }) {
       {recipeDetails.map((recipe, index) => (
         <div
           key={ index }
-          className="bg-red-500 flex flex-col"
+          className="flex flex-col"
         >
-          <div className="flex justify-end">
-            <ShareButton testId="share-btn" />
-            <button
-              id="favorite-btn"
-              data-testid="favorite-btn"
-              onClick={ handleFavoriteButton }
-              src={ favoriteIcon ? blackHeartIcon : whiteHeartIcon }
-            >
-              {favoriteIcon
-                ? <img src={ blackHeartIcon } alt="favorite icon" />
-                : <img src={ whiteHeartIcon } alt="favorite icon" />}
-            </button>
-          </div>
           <section
-            className="flex flex-col justify-center items-center"
+            className="bg-cover bg-center text-white"
+            style={ {
+              backgroundImage: `url(${recipe.strDrinkThumb || recipe.strMealThumb})`,
+            } }
           >
-            <p
-              data-testid="recipe-title"
-              className="text-2xl font-bold text-center"
+            <div
+              className="flex justify-end"
             >
-              {recipe.strDrink || recipe.strMeal}
-            </p>
-            {
-              recipe.strAlcoholic && (
-                <p data-testid="recipe-category">{recipe.strAlcoholic}</p>
-              )
-            }
-            <p data-testid="recipe-category">{recipe.strCategory}</p>
+              <ShareButton testId="share-btn" />
+              <button
+                id="favorite-btn"
+                data-testid="favorite-btn"
+                onClick={ handleFavoriteButton }
+                src={ favoriteIcon ? blackHeartIcon : whiteHeartIcon }
+              >
+                {favoriteIcon
+                  ? <img src={ blackHeartIcon } alt="favorite icon" />
+                  : <img src={ whiteHeartIcon } alt="favorite icon" />}
+              </button>
+            </div>
+            <div
+              className="flex flex-col justify-center items-center"
+            >
+              <p
+                data-testid="recipe-title"
+                className="text-2xl font-bold text-center"
+              >
+                {recipe.strDrink || recipe.strMeal}
+              </p>
+              {
+                recipe.strAlcoholic && (
+                  <p data-testid="recipe-category">{recipe.strAlcoholic}</p>
+                )
+              }
+              <p data-testid="recipe-category">{recipe.strCategory}</p>
+            </div>
           </section>
           <div
             className="box-border border-2 border-black rounded-lg bg-white p-2 m-2"
@@ -176,12 +185,6 @@ function RecipeDetails({ recipeType }) {
               src={ recipe.strYoutube.replace('watch?v=', 'embed/') }
             />
           )}
-          <img
-            src={ recipe.strDrinkThumb || recipe.strMealThumb }
-            alt="Product"
-            data-testid="recipe-photo"
-          />
-
         </div>
       ))}
       <h2> Recomendações: </h2>
