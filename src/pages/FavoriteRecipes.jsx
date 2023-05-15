@@ -19,32 +19,38 @@ function FavoriteRecipes() {
   };
 
   return (
-    <>
+    <div className="h-screen">
       <Header title="Favorite Recipes" searchBtn={ false } />
-      <div>FavoriteRecipes</div>
-      <button
-        id="filter-by-all-btn"
-        data-testid="filter-by-all-btn"
-        onClick={ handleFilterClick }
-      >
-        All
-      </button>
-      <button
-        id="filter-by-meal-btn"
-        data-testid="filter-by-meal-btn"
-        onClick={ handleFilterClick }
-      >
-        Meals
-      </button>
-      <button
-        id="filter-by-drink-btn"
-        data-testid="filter-by-drink-btn"
-        onClick={ handleFilterClick }
-      >
-        Drinks
-      </button>
+      <div className="flex flex-row w-full justify-center mt-6">
+        <div className="justify-center items-center flex flex-row w-[80%] mb-2">
+          <button
+            id="filter-by-all-btn"
+            data-testid="filter-by-all-btn"
+            onClick={ handleFilterClick }
+            className="py-1 px-2 w-full teste-shadow rounded-md bg-white mx-1"
+          >
+            All
+          </button>
+          <button
+            id="filter-by-meal-btn"
+            data-testid="filter-by-meal-btn"
+            onClick={ handleFilterClick }
+            className="py-1 px-2 w-full teste-shadow rounded-md bg-white mx-1"
+          >
+            Meals
+          </button>
+          <button
+            id="filter-by-drink-btn"
+            data-testid="filter-by-drink-btn"
+            onClick={handleFilterClick}
+            className="py-1 px-2 w-full teste-shadow rounded-md bg-white mx-1"
+          >
+            Drinks
+          </button>
+        </div>
+      </div>
       <RecipesList listFilter={ filter } pageType={ pageType } />
-    </>
+    </div>
   );
 }
 

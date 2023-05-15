@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import '../index.css';
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 import { setLocalStorage } from '../services/localStorage';
 import recipesLogo from '../images/recipesLogo.png';
@@ -41,10 +42,9 @@ function Login() {
 
   return (
     <div
-      className="bg-gradient-to-b from-[#ffa94d] from-35% to-[#66d1f5] to-70%
-      h-screen w-screen flex flex-col justify-evenly"
+      className=" h-screen w-screen flex flex-col justify-evenly login-bg"
     >
-      <img src={ recipesLogo } alt="Recipes Logo" className="mb-20" />
+      <img src={ recipesLogo } alt="Recipes Logo" className="mb-17" />
       <div className=" w-full flex justify-center">
         <form className="flex flex-col w-3/4">
           <input
@@ -67,7 +67,12 @@ function Login() {
             data-testid="login-submit-btn"
             disabled={ !validLogin }
             onClick={ handleLoginClick }
-            className="bg-white rounded-lg py-1"
+            className={
+              `${
+                !validLogin
+                  ? ('bg-gray-400 rounded-lg py-1 text-gray-700 cursor-not-allowed')
+                  : ('bg-white rounded-lg py-1')}`
+            }
           >
             Enter
           </button>

@@ -1,6 +1,8 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom/cjs/react-router-dom.min';
+import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 import DeleteFavoriteRecipeButton from './DeleteFavoriteRecipeButton';
 import ShareButtonById from './ShareButtonById';
 
@@ -21,56 +23,62 @@ function RecipeCard({
   alcoholicOrNot,
   shareTestId,
   favoriteTestId }) {
+  const history = useHistory();
   return (
-    <div>
-      <div>
-        <Link to={ `/${type}s/${id}` }>
-          <img
-            src={ srcImage }
-            alt={ name }
-            data-testid={ `${index}-horizontal-image` }
-          />
-          <p
-            data-testid={ `${index}-horizontal-top-text` }
-          >
-            {type === 'meal'
-              ? `${nationality} - ${category}` : `${alcoholicOrNot} - ${category}`}
-          </p>
-          <p
-            data-testid={ `${index}-horizontal-name` }
-          >
-            { name }
-          </p>
-          {pageType === DONE_RECIPES && (
-            <p
-              data-testid={ `${index}-horizontal-done-date` }
-            >
-              {`Done in: ${doneDate}`}
-            </p>
-          )}
-          {pageType === DONE_RECIPES && Array.isArray(tags) && (
-            tags.map((tag) => (
-              <p
-                data-testid={ `${index}-${tag}-horizontal-tag` }
-                key={ tag }
-              >
-                {tag}
-              </p>
-            ))
-          )}
-        </Link>
-      </div>
-      <ShareButtonById
-        testId={ shareTestId }
-        id={ id }
-        type={ type }
-      />
-      {pageType === FAVORITE_RECIPES && (
-        <DeleteFavoriteRecipeButton
-          testId={ favoriteTestId }
-          id={ id }
+    <div className="flex flex-row mx-6 rounded-md card-shadow mb-4 mt-2">
+      <div className="max-w-[50%]">
+        <img
+          src={ srcImage }
+          alt={ name }
+          data-testid={ `${index}-horizontal-image` }
+          onClick={ () => history.push(`/${type}s/${id}`) }
+          className="rounded-l-md"
         />
-      )}
+      </div>
+      <div className="w-1/2 flex flex-col items-center justify-between py-2">
+        <p
+          className="text-center"
+          data-testid={ `${index}-horizontal-top-text` }
+        >
+          {type === 'meal'
+            ? `${nationality} - ${category}` : `${alcoholicOrNot} - ${category}`}
+        </p>
+        <p
+          data-testid={ `${index}-horizontal-name` }
+        >
+          { name }
+        </p>
+        {pageType === DONE_RECIPES && (
+          <p
+            data-testid={ `${index}-horizontal-done-date` }
+          >
+            {`Done in: ${doneDate}`}
+          </p>
+        )}
+        {pageType === DONE_RECIPES && Array.isArray(tags) && (
+          tags.map((tag) => (
+            <p
+              data-testid={ `${index}-${tag}-horizontal-tag` }
+              key={ tag }
+            >
+              {tag}
+            </p>
+          ))
+        )}
+        <div className="flex flex-row">
+          <ShareButtonById
+            testId={ shareTestId }
+            id={ id }
+            type={ type }
+          />
+          {pageType === FAVORITE_RECIPES && (
+            <DeleteFavoriteRecipeButton
+              testId={ favoriteTestId }
+              id={ id }
+            />
+          )}
+        </div>
+      </div>
     </div>
   );
 }

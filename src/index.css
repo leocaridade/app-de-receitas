@@ -24,3 +24,8 @@ code {
 .card-shadow {
   box-shadow: 1px 2px 5px rgba(0, 0, 0, .4)
 }
+
+.login-bg{
+  background-image: url("./images/LoginBG.png");
+  background-size: cover;
+}

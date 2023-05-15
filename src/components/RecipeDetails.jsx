@@ -107,22 +107,31 @@ function RecipeDetails({ recipeType }) {
   };
 
   return (
-    <div>
-      <p>{`Hello World! Your recipe type is: ${recipeType}`}</p>
-      <ShareButton testId="share-btn" />
-      <button
-        id="favorite-btn"
-        data-testid="favorite-btn"
-        onClick={ handleFavoriteButton }
-        src={ favoriteIcon ? blackHeartIcon : whiteHeartIcon }
-      >
-        {favoriteIcon
-          ? <img src={ blackHeartIcon } alt="favorite icon" />
-          : <img src={ whiteHeartIcon } alt="favorite icon" />}
-      </button>
+    <div className="flex-column justify-center">
+      <div>
+        <ShareButton testId="share-btn" />
+        <button
+          id="favorite-btn"
+          data-testid="favorite-btn"
+          onClick={ handleFavoriteButton }
+          src={ favoriteIcon ? blackHeartIcon : whiteHeartIcon }
+        >
+          {favoriteIcon
+            ? <img src={ blackHeartIcon } alt="favorite icon" />
+            : <img src={ whiteHeartIcon } alt="favorite icon" />}
+        </button>
+      </div>
       {recipeDetails.map((recipe, index) => (
-        <div key={ index }>
-          <p data-testid="recipe-title">{recipe.strDrink || recipe.strMeal}</p>
+        <div
+          key={ index }
+          className="flex-col justify-items-center"
+        >
+          <p
+            data-testid="recipe-title"
+            // className={}
+          >
+            {recipe.strDrink || recipe.strMeal}
+          </p>
           {recipe.strAlcoholic && (
             <p data-testid="recipe-category">{recipe.strAlcoholic}</p>
           )}
@@ -160,15 +169,14 @@ function RecipeDetails({ recipeType }) {
         />
       </div>
       {renderButton && (
-        <Link to={ `${history.location.pathname}/in-progress` }>
-          <button
-            id="start-recipe-btn"
-            data-testid="start-recipe-btn"
-            className="fixed bottom-0"
-          >
-            { recipeInProgress ? 'Continue Recipe' : 'Start Recipe'}
-          </button>
-        </Link>
+        <button
+          id="start-recipe-btn"
+          data-testid="start-recipe-btn"
+          className="fixed bottom-0 inset-x-0 bg-red-500 rounded-lg py-1"
+          onClick={ () => history.push(`${history.location.pathname}/in-progress`) }
+        >
+          { recipeInProgress ? 'Continue Recipe' : 'Start Recipe'}
+        </button>
       )}
     </div>
   );

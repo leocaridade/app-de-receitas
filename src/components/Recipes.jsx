@@ -125,8 +125,8 @@ function Recipes({ recipeType, searchRecipes }) {
   }, [searchRecipes]);
 
   return (
-    <div className="bg-[#ffa94d]">
-      <div className="flex flex-row flex-wrap justify-center pt-6">
+    <div className={ `${recipeType === 'meals' ? 'bg-[#fff4e6]' : 'bg-[#e3fafc]'}` }>
+      <div className="flex flex-row flex-wrap justify-center" id="categories-div">
         <button
           onClick={ handleAllCategoryClick }
           data-testid="All-category-filter"
@@ -135,7 +135,7 @@ function Recipes({ recipeType, searchRecipes }) {
           All
         </button>
         {mappedCategories.map((category, index) => (
-          <div key={ index } className="w-[30%] my-1 mx-1">
+          <div key={ index } className="w-[30%] my-1 mx-1 flex">
             <button
               onClick={ () => handleCategoryClick(category.strCategory) }
               data-testid={ `${category.strCategory}-category-filter` }
@@ -146,7 +146,7 @@ function Recipes({ recipeType, searchRecipes }) {
           </div>
         ))}
       </div>
-      <div className="w-full flex flex-row flex-wrap pb-10">
+      <div className="w-full flex flex-row flex-wrap pb-20">
         {isLoading ? <p>Loading...</p> : mappedRecipes}
       </div>
     </div>

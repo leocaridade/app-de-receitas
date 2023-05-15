@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 
 function Profile() {
   const [userEmail, setUserEmail] = useState('');
+  const history = useHistory();
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem('user'));
@@ -14,31 +15,45 @@ function Profile() {
 
   const handleLogoutClick = () => {
     localStorage.clear();
+    history.push('/');
   };
 
   return (
-    <>
+    <div className="h-screen">
       <Header title="Profile" searchBtn={ false } />
-      <div>
-        <p>Hello, user, this is your Profile</p>
-        <p data-testid="profile-email">{ userEmail }</p>
-        <Link to="/done-recipes">
-          <button data-testid="profile-done-btn">Done Recipes</button>
-        </Link>
-        <Link to="/favorite-recipes">
-          <button data-testid="profile-favorite-btn">Favorite Recipes</button>
-        </Link>
-        <Link to="/">
+      <div
+        className="flex flex-col h-[75%] items-center justify-between py-20"
+      >
+        <div className="flex flex-col justify-center items-center">
+          <p>Your e-mail: </p>
+          <p data-testid="profile-email">{userEmail}</p>
+        </div>
+        <div className="flex flex-col justify-items-start items-center w-2/3 h-3/5">
+          <button
+            data-testid="profile-done-btn"
+            className="bg-slate-100 py-1 px-2 rounded-md my-2 w-full"
+            onClick={ () => history.push('/done-recipes') }
+          >
+            Done Recipes
+          </button>
+          <button
+            data-testid="profile-favorite-btn"
+            className="bg-slate-100 py-1 px-2 rounded-md my-2 w-full"
+            onClick={ () => history.push('/favorite-recipes') }
+          >
+            Favorite Recipes
+          </button>
           <button
             data-testid="profile-logout-btn"
             onClick={ handleLogoutClick }
+            className="bg-slate-100 py-1 px-2 rounded-md my-2 w-full"
           >
             Logout
           </button>
-        </Link>
+        </div>
       </div>
       <Footer />
-    </>
+    </div>
   );
 }
 

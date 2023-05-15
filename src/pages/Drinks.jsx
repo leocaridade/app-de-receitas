@@ -5,12 +5,11 @@ import Recipes from '../components/Recipes';
 
 function Drinks() {
   return (
-    <>
+    <div className="h-screen">
       <Header title="Drinks" searchBtn />
       <Recipes recipeType="drinks" />
-      <div>Drinks</div>
       <Footer />
-    </>
+    </div>
   );
 }
 
