@@ -107,7 +107,7 @@ function RecipeDetails({ recipeType }) {
   };
 
   return (
-    <div className="h-screen w-screen flex flex-col">
+    <div className="h-screen w-screen">
       {/* <section> */}
       {recipeDetails.map((recipe, index) => (
         <div
@@ -153,7 +153,7 @@ function RecipeDetails({ recipeType }) {
             </div>
           </section>
           <div
-            className="box-border border-2 border-black rounded-lg bg-white p-2 m-2"
+            className="box-border border border-gray-300 rounded-lg bg-white p-2 m-2 card-shadow"
           >
             <p
               className="text-2xl font-bold text-center"
@@ -167,14 +167,23 @@ function RecipeDetails({ recipeType }) {
             ))}
           </div>
           <div
-            className="box-border border-2 border-black rounded-lg bg-white p-2 m-2"
+            className="box-border border border-gray-300 rounded-lg bg-white p-2 m-2 card-shadow"
           >
             <p
               className="text-2xl font-bold text-center"
+              data-testid="instructions"
             >
               Instructions:
             </p>
-            <p data-testid="instructions">{recipe.strInstructions}</p>
+            {
+              `${recipe.strInstructions.split('\r\n\r\n').map((instruction, i) => (
+                <p key={ i }>
+                  {instruction}
+                </p>
+              ))}
+              ${console.log(recipe.strInstructions.split('\r\n\r\n'))}`
+            }
+            {/* TODO arrumar o retorno acima das isntrucoes da receita */}
           </div>
           {recipeType === 'meals' && (
             <iframe
@@ -183,26 +192,27 @@ function RecipeDetails({ recipeType }) {
               width="320"
               height="240"
               src={ recipe.strYoutube.replace('watch?v=', 'embed/') }
+              className="mx-auto box-border border border-gray-300 rounded-lg bg-white p-2 m-2 card-shadow"
             />
           )}
+          <div
+            className='pb-10'
+          >
+            <h2 className="text-2xl font-bold text-center"> Recomendações: </h2>
+            <Recommendations
+              baseRecipes={ baseRecipes }
+            />
+          </div>
+          <button
+            id="start-recipe-btn"
+            data-testid="start-recipe-btn"
+            className="fixed bottom-0 inset-x-0 bg-[#FCC436] rounded-t-lg py-1 w-screen"
+            onClick={ () => history.push(`${history.location.pathname}/in-progress`) }
+          >
+            { recipeInProgress ? 'Continue Recipe' : 'Start Recipe'}
+          </button>
         </div>
       ))}
-      <h2> Recomendações: </h2>
-      <div>
-        <Recommendations
-          baseRecipes={ baseRecipes }
-        />
-      </div>
-      {renderButton && (
-        <button
-          id="start-recipe-btn"
-          data-testid="start-recipe-btn"
-          className="fixed bottom-0 inset-x-0 bg-red-500 rounded-lg py-1"
-          onClick={ () => history.push(`${history.location.pathname}/in-progress`) }
-        >
-          { recipeInProgress ? 'Continue Recipe' : 'Start Recipe'}
-        </button>
-      )}
     </div>
   );
 }
