@@ -121,10 +121,11 @@ function RecipeDetails({ recipeType }) {
             } }
           >
             <div
-              className="flex justify-end"
+              className="flex justify-end mt-2 mr-2"
             >
               <ShareButton testId="share-btn" />
               <button
+                className="pl-2"
                 id="favorite-btn"
                 data-testid="favorite-btn"
                 onClick={ handleFavoriteButton }

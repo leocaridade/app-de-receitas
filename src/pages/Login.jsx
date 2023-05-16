@@ -56,7 +56,7 @@ function Login() {
             className="px-4 py-2 mb-4 rounded-lg"
           />
           <input
-            type="text"
+            type="password"
             name="password"
             data-testid="password-input"
             placeholder="Digite sua senha"

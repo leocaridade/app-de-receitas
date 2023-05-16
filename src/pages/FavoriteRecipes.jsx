@@ -19,7 +19,7 @@ function FavoriteRecipes() {
   };
 
   return (
-    <div className="h-screen">
+    <div className="h-screen bg-[#FAF6F4]">
       <Header title="Favorite Recipes" searchBtn={ false } />
       <div className="flex flex-row w-full justify-center mt-6">
         <div className="justify-center items-center flex flex-row w-[80%] mb-2">

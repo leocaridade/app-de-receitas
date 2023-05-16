@@ -25,7 +25,7 @@ function ShareButton({ testId }) {
       >
         <img src={ shareSVG } alt="share" />
       </button>
-      {isLinkCopied && <p>Link copied!</p>}
+      {isLinkCopied && <p className="text-black">Link copied!</p>}
     </>
   );
 }
