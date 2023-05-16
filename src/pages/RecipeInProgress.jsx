@@ -7,6 +7,7 @@ import whiteHeartIcon from '../images/whiteHeartIcon.svg';
 import { fetchDrinkByIdAPI } from '../services/drinksAPI';
 import { fetchFoodByIdAPI } from '../services/mealsAPI';
 import { getLocalStorage, setLocalStorage } from '../services/localStorage';
+import shareSVG from '../images/shareIcon.svg';
 
 function RecipeInProgress() {
   const [recipeDetails, setRecipeDetails] = useState([]);
@@ -171,57 +172,108 @@ function RecipeInProgress() {
   };
   return (
     <div>
-      <p>{`Hello World! Your recipe type is: ${recipeType}`}</p>
-      <button id="share-btn" data-testid="share-btn" onClick={ handleShareButton }>
-        Compartilhar receita
-      </button>
-      <button
-        id="favorite-btn"
-        data-testid="favorite-btn"
-        onClick={ handleFavoriteButton }
-        src={ favoriteIcon ? blackHeartIcon : whiteHeartIcon }
-      >
-        {
-          favoriteIcon
-            ? <img src={ blackHeartIcon } alt="favorite icon" />
-            : <img src={ whiteHeartIcon } alt="favorite icon" />
-        }
-      </button>
-      {isLinkCopied && <p>Link copied!</p>}
       {recipeDetails.map((recipe, index) => (
-        <div key={ index }>
-          <p data-testid="recipe-title">{recipe.strDrink || recipe.strMeal}</p>
-          {recipe.strAlcoholic && (
-            <p data-testid="recipe-category">{recipe.strAlcoholic}</p>
-          )}
-          <p data-testid="recipe-category">{recipe.strCategory}</p>
-          <div>
-            <p>Ingredients:</p>
-            {ingredientDetails.map((ingredient, i) => (
-              <label
-                key={ i }
-                data-testid={ `${i}-ingredient-step` }
-                style={ {
-                  textDecoration: (
-                    checkboxValues[recipeType]?.[recipeID]?.[`ingredientstep${i}`]
-                      ? 'line-through solid rgb(0, 0, 0)' : 'none'
-                  ),
-                } }
+        <div
+          key={ index }
+          className="flex flex-col"
+
+        >
+          <section
+            className="bg-cover bg-center text-white h-40"
+            style={ {
+              backgroundImage: `url(${recipe.strDrinkThumb || recipe.strMealThumb})`,
+            } }
+          >
+            <div
+              className="flex justify-end"
+            >
+              {isLinkCopied && <p className="text-black">Link copied!</p>}
+              <button
+                id="share-btn"
+                data-testid="share-btn"
+                onClick={ handleShareButton }
               >
-                <input
-                  type="checkbox"
-                  id={ `ingredientstep${i}` }
-                  name={ `ingredientstep${i}` }
-                  checked={ checkboxValues[recipeType]?.
-                    [recipeID]?.[`ingredientstep${i}`] || false }
-                  onChange={ handleCheckboxChange }
-                />
-                {`${ingredient[1]} - ${recipe[`strMeasure${i + 1}`]}`}
-              </label>
+                <img src={ shareSVG } alt="share" />
+              </button>
+              <button
+                id="favorite-btn"
+                data-testid="favorite-btn"
+                onClick={ handleFavoriteButton }
+                src={ favoriteIcon ? blackHeartIcon : whiteHeartIcon }
+              >
+                {
+                  favoriteIcon
+                    ? <img src={ blackHeartIcon } alt="favorite icon" />
+                    : <img src={ whiteHeartIcon } alt="favorite icon" />
+                }
+              </button>
+            </div>
+            <div
+              className="flex flex-col justify-center items-center"
+            >
+              <p
+                data-testid="recipe-title"
+                className="text-5xl font-bold text-center"
+              >
+                {recipe.strDrink || recipe.strMeal}
+              </p>
+              {recipe.strAlcoholic && (
+                <p data-testid="recipe-category">{recipe.strAlcoholic}</p>
+              )}
+              <p data-testid="recipe-category">{recipe.strCategory}</p>
+            </div>
+          </section>
+          <div
+            className="box-border border border-gray-300 rounded-lg bg-white p-2 m-2 card-shadow"
+          >
+            <p
+              className="text-2xl font-bold text-center"
+            >
+              Ingredients:
+            </p>
+            {ingredientDetails.map((ingredient, i) => (
+              <p
+                key={ i }
+                className="p-1"
+              >
+                <label
+                  key={ i }
+                  data-testid={ `${i}-ingredient-step` }
+                  style={ {
+                    textDecoration: (
+                      checkboxValues[recipeType]?.[recipeID]?.[`ingredientstep${i}`]
+                        ? 'line-through solid rgb(0, 0, 0)' : 'none'
+                    ),
+                  } }
+                >
+                  <input
+                    type="checkbox"
+                    id={ `ingredientstep${i}` }
+                    name={ `ingredientstep${i}` }
+                    checked={ checkboxValues[recipeType]?.
+                      [recipeID]?.[`ingredientstep${i}`] || false }
+                    onChange={ handleCheckboxChange }
+                  />
+                  {` ${ingredient[1]} - ${recipe[`strMeasure${i + 1}`]}`}
+                </label>
+              </p>
             ))}
           </div>
-          <p> Instructions: </p>
-          <p data-testid="instructions">{recipe.strInstructions}</p>
+          <div
+          className="box-border border border-gray-300 rounded-lg bg-white p-2 m-2 card-shadow"
+          >
+            <p> Instructions: </p>
+            {
+              recipe.strInstructions.split('\r\n\r\n').map((instruction, i) => (
+                <p
+                  key={ i }
+                  className="p-2"
+                >
+                  {instruction}
+                </p>
+              ))
+            }
+          </div>
           {recipeType === 'meals' && (
             <iframe
               data-testid="video"
@@ -229,19 +281,20 @@ function RecipeInProgress() {
               width="320"
               height="240"
               src={ recipe.strYoutube.replace('watch?v=', 'embed/') }
+              className="mx-auto box-border border border-gray-300 rounded-lg bg-white p-2 m-2 card-shadow mb-10"
             />
           )}
-          <img
-            src={ recipe.strDrinkThumb || recipe.strMealThumb }
-            alt="Product"
-            data-testid="recipe-photo"
-          />
         </div>
       ))}
       <Link to="/done-recipes">
         <button
           data-testid="finish-recipe-btn"
-          className="fixed bottom-0"
+          className={
+            `${
+              !isFinishBtnEnabled
+                ? ('fixed bottom-0 inset-x-0 bg-gray-400 rounded-lg py-1 w-screen text-gray-700 cursor-not-allowed')
+                : ('fixed bottom-0 inset-x-0 bg-[#FCC436] rounded-t-lg py-1 w-screen')}`
+          }
           disabled={ !isFinishBtnEnabled }
           onClick={ handleFinishButton }
         >

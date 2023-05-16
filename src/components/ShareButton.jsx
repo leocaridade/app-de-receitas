@@ -17,6 +17,7 @@ function ShareButton({ testId }) {
 
   return (
     <>
+      {isLinkCopied && <p className="text-black">Link copied!</p>}
       <button
         onClick={ handleShareButton }
         type="button"
@@ -25,7 +26,6 @@ function ShareButton({ testId }) {
       >
         <img src={ shareSVG } alt="share" />
       </button>
-      {isLinkCopied && <p>Link copied!</p>}
     </>
   );
 }
