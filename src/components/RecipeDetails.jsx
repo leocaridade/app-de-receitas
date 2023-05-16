@@ -162,7 +162,11 @@ function RecipeDetails({ recipeType }) {
               Ingredients:
             </p>
             {ingredientDetails.map((ingredient, i) => (
-              <p key={ i } data-testid={ `${i}-ingredient-name-and-measure` }>
+              <p
+                key={ i }
+                data-testid={ `${i}-ingredient-name-and-measure` }
+                className="p-1"
+              >
                 {`${ingredient[1]} - ${recipe[`strMeasure${i + 1}`]}`}
               </p>
             ))}
