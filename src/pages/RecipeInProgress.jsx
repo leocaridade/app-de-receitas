@@ -181,9 +181,11 @@ function RecipeInProgress() {
         onClick={ handleFavoriteButton }
         src={ favoriteIcon ? blackHeartIcon : whiteHeartIcon }
       >
-        {favoriteIcon
-          ? <img src={ blackHeartIcon } alt="favorite icon" />
-          : <img src={ whiteHeartIcon } alt="favorite icon" />}
+        {
+          favoriteIcon
+            ? <img src={ blackHeartIcon } alt="favorite icon" />
+            : <img src={ whiteHeartIcon } alt="favorite icon" />
+        }
       </button>
       {isLinkCopied && <p>Link copied!</p>}
       {recipeDetails.map((recipe, index) => (

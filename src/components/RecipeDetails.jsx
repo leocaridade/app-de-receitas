@@ -176,14 +176,15 @@ function RecipeDetails({ recipeType }) {
               Instructions:
             </p>
             {
-              `${recipe.strInstructions.split('\r\n\r\n').map((instruction, i) => (
-                <p key={ i }>
+              recipe.strInstructions.split('\r\n\r\n').map((instruction, i) => (
+                <p
+                  key={ i }
+                  className="p-2"
+                >
                   {instruction}
                 </p>
-              ))}
-              ${console.log(recipe.strInstructions.split('\r\n\r\n'))}`
+              ))
             }
-            {/* TODO arrumar o retorno acima das isntrucoes da receita */}
           </div>
           {recipeType === 'meals' && (
             <iframe
@@ -196,7 +197,7 @@ function RecipeDetails({ recipeType }) {
             />
           )}
           <div
-            className='pb-10'
+            className="pb-10"
           >
             <h2 className="text-2xl font-bold text-center"> Recomendações: </h2>
             <Recommendations
